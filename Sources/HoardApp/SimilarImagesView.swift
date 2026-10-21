@@ -33,6 +33,14 @@ struct SimilarImagesView: View {
                 if report.groups.isEmpty { Text("目前沒有找到相似的照片。") }
                 ForEach(Array(report.groups.enumerated()), id: \.offset) { _, group in
                     DisclosureGroup("相似，並非相同・\(group.members.count) 張・\(group.partial ? String(localized: "未完成") : String(localized: "可考慮清理 \(Fmt.bytes(group.reclaimableBytes))"))") {
+                        Button("只留建議保留的") {
+                            for member in group.members where member.node != group.suggestedKeep {
+                                if model.isLive(member.node) && model.tree?.path(of: member.node) == member.path &&
+                                    keepRemains(group) && model.trashBlockReason(member.node) == nil {
+                                    model.similarPicks[member.node] = member.path
+                                }
+                            }
+                        }
                         ForEach(group.members, id: \.path) { member in
                             row(member, keep: group.suggestedKeep, keepRemains: keepRemains(group))
                         }
@@ -61,6 +69,14 @@ struct SimilarImagesView: View {
     private func row(_ member: SimilarMember, keep: NodeID, keepRemains: Bool) -> some View {
         let live = model.isLive(member.node) && model.tree?.path(of: member.node) == member.path
         return HStack {
+            if live && keepRemains && member.node != keep && model.trashBlockReason(member.node) == nil {
+                Toggle(isOn: Binding(get: { model.similarPicks[member.node] == member.path }, set: { picked in
+                    if picked { model.similarPicks[member.node] = member.path }
+                    else { model.similarPicks.removeValue(forKey: member.node) }
+                })) { Text((member.path as NSString).lastPathComponent) }
+                    .toggleStyle(.checkbox).labelsHidden()
+                    .accessibilityLabel((member.path as NSString).lastPathComponent)
+            }
             VStack(alignment: .leading, spacing: 2) {
                 HStack {
                     Text((member.path as NSString).lastPathComponent)
@@ -86,6 +102,7 @@ struct SimilarImagesView: View {
 
     private func start() {
         guard let tree = model.tree, !pending else { return }
+        model.similarPicks = [:]
         let nodes = tree.nodes, rootPath = tree.rootPath, scope = model.scope, generation = model.generation
         // A rescan of the same root keeps generation and may keep the scope: only the tree tells.
         weak let started = tree
@@ -113,6 +130,7 @@ struct SimilarImagesView: View {
     }
 
     private func reset() {
+        model.similarPicks = [:]
         task?.cancel()
         task = nil
         pending = false

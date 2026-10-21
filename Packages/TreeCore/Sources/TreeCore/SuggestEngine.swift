@@ -682,7 +682,7 @@ public enum CleanupSuggester {
                     if all[i].isDirectory {
                         var c = all[i].firstChild
                         while c >= 0 { stack.append(c); c = all[Int(c)].nextSibling }
-                    } else if all[i].linkCount > 1 || all[i].flags.contains(.cloneShared) {
+                    } else if all[i].sharesStorage {
                         s.shared += 1
                     }
                 }

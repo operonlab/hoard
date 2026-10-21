@@ -254,10 +254,10 @@ struct ChangesView: View {
 
     private func summaryCards(_ rows: [ChangeRow], report: DiffReport) -> some View {
         // Uncertain rows may be permission changes, not growth or freed space: kept out of the totals.
-        let certain = rows.filter { !$0.uncertain }
-        let uncertainCount = rows.count - certain.count
+        let uncertain = Set(rows.filter(\.uncertain).map(\.id))
+        let uncertainCount = uncertain.count
         // A folder row already contains the rows listed inside it: count each change once.
-        let (up, down) = TreeDiff.listedTotals(certain.map { (path: $0.id, delta: $0.delta) })
+        let (up, down) = TreeDiff.listedTotals(rows.map { (path: $0.id, delta: $0.delta) }, uncertain: uncertain)
         // Below the root the report has no exact total for the scope; the listed changes are the estimate.
         let net = model.scope == FileTree.root ? report.totalDelta : up + down
         // The root totals include changes omitted by the row threshold and top-N filter.

@@ -10,9 +10,10 @@ and versions follow [Semantic Versioning](https://semver.org/).
 - **Recent Changes overstated how much grew.** The Larger and Smaller totals added up every row,
   but the list shows a folder together with the items inside it, so one new file was counted once
   for itself and again for each listed folder above it: adding 2.9 GB showed "Larger +7.53 GB" next
-  to a correct net change of +2.34 GB. The totals now count only the most specific rows (those with
-  no listed row inside them), so Larger, Smaller and the net change agree. The rule lives in
-  `TreeDiff.listedTotals` with tests (`DiffTotalsTests`).
+  to a correct net change of +2.34 GB. Each row now adds only what is left after the listed rows
+  inside it are taken out, in its own direction, so changes too small to list still count and Larger
+  plus Smaller equals the net change. The rule lives in `TreeDiff.listedTotals` with tests
+  (`DiffTotalsTests`).
 
 - **`hoard scan /` counted the data volume twice.** `/` is the read-only system volume. Walked from
   there, the data volume is reached once under `/System/Volumes/Data` and again through the

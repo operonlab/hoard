@@ -18,14 +18,14 @@ deletes anything by itself.
 ## What sets it apart
 
 - **See what grew.** Recent Changes compares the disk with an earlier scan and lists what grew,
-  shrank, appeared or disappeared, down to the file. `hoard diff` answers the same question on the
-  command line.
+  shrank, appeared or disappeared, down to each file over 10 MiB. `hoard diff` answers the same
+  question on the command line.
 - **No rescan after you delete.** What you move to the Trash leaves the map at once, and changes
   made elsewhere show up while Hoard is open.
 - **Numbers you can trust.** Hardlinks and APFS clones are counted once. A folder Hoard cannot read
   is marked unknown, never zero. It never downloads iCloud files to measure them.
-- **Nothing goes without your yes.** Move to Trash asks first, refuses anything you protected and
-  never takes the last copy of a duplicate. ⌘Z puts the last batch back.
+- **Nothing goes without your yes.** Move to Trash asks first and refuses anything you protected; in
+  the duplicates list it never takes the last copy. ⌘Z puts the last batch back.
 - **Open to AI agents.** A command-line tool with JSON output, an MCP server and a Claude Code skill.
   Agents can read everything, add protection and put back a guarded file that was deleted; they
   cannot delete, move or unprotect anything.

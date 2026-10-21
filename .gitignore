@@ -1,0 +1,6 @@
+.build/
+.worktrees/
+.swiftpm/
+*.app/
+dist/
+Packages/TreeCore/bench-results/

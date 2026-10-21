@@ -91,7 +91,7 @@ extension AppModel {
         trashRequest = TrashRequest(items: items, source: origin, tree: tree)
     }
 
-    func requestBatchTrash(_ ids: [NodeID], source: String, reviewCount: Int = 0,
+    func requestBatchTrash(_ ids: [NodeID], source: String, review: Set<NodeID> = [],
                            duplicates: [NodeID: (copy: DuplicateCopy, others: [DuplicateCopy])] = [:],
                            refused: [(name: String, reason: String)] = []) {
         guard let tree else { return }
@@ -110,9 +110,11 @@ extension AppModel {
             return
         }
         let allowedSet = Set(allowed)
-        trashRequest = TrashRequest(items: trashItems(allowed, in: tree), source: source, tree: tree,
+        // Counted on the items that stay in the sheet: a picked item inside a picked folder is dropped.
+        let items = trashItems(allowed, in: tree)
+        trashRequest = TrashRequest(items: items, source: source, tree: tree,
                                     duplicates: duplicates.filter { allowedSet.contains($0.key) },
-                                    skipped: skipped, reviewCount: reviewCount)
+                                    skipped: skipped, reviewCount: items.filter { review.contains($0.id) }.count)
     }
 
     private static func batchDetails(_ failures: [(name: String, reason: String)]) -> String {

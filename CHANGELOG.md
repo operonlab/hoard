@@ -9,8 +9,9 @@ and versions follow [Semantic Versioning](https://semver.org/).
 
 - **Cleanup moves many items to the Trash in one go.** Check suggestions one by one or with Select
   All in This Category, then confirm once; Move All to Trash does it for every listed suggestion.
-  Items that cannot go (protected, system folders, inside a package) are named in the confirmation
-  and left out instead of blocking the batch, and ⌘Z puts the whole batch back.
+  Items that cannot go (protected, system folders, inside a package) are left out instead of
+  blocking the batch; the confirmation says how many and why, naming the first three. ⌘Z puts the
+  whole batch back.
 - **Duplicate Files: pick copies across groups.** Keep One picks every copy but one in a group; Keep
   One of Each does it for every confirmed group, keeping the first copy in path order. A group can
   never lose its last copy.

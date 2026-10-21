@@ -11,7 +11,7 @@ struct CleanupView: View {
                 ViewHeader(title: String(localized: "可以清掉的"), sentence: summary, busy: model.cleanupPending) {
                     Button("全部丟到垃圾桶…") {
                         let rows = liveSuggestions
-                        model.requestBatchTrash(rows.map(\.node), source: "suggest", reviewCount: reviewCount(rows))
+                        model.requestBatchTrash(rows.map(\.node), source: "suggest", review: reviewIDs(rows))
                     }
                     .disabled(liveSuggestions.isEmpty)
                     .help("把所有清理建議一起丟到垃圾桶；會先列出項目讓你確認。")
@@ -92,8 +92,8 @@ struct CleanupView: View {
         model.isLive(row.node) && model.tree?.path(of: row.node) == row.path && model.trashBlockReason(row.node) == nil
     }
 
-    private func reviewCount(_ rows: [Suggestion]) -> Int {
-        rows.filter { $0.safety == .review && model.trashBlockReason($0.node) == nil }.count
+    private func reviewIDs(_ rows: [Suggestion]) -> Set<NodeID> {
+        Set(rows.filter { $0.safety == .review }.map(\.node))
     }
 
     private func clearPicks() {
@@ -114,7 +114,7 @@ struct CleanupView: View {
                     Button("取消選取") { model.suggestionPicks = [:] }
                     Button("丟到垃圾桶…") {
                         let rows = liveSuggestions.filter { suggestions.contains($0.node) }
-                        model.requestBatchTrash(suggestions, source: "suggest", reviewCount: reviewCount(rows))
+                        model.requestBatchTrash(suggestions, source: "suggest", review: reviewIDs(rows))
                     }
                 }
             }

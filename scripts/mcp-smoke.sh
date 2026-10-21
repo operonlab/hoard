@@ -165,3 +165,21 @@ finally:
     server.wait(timeout=10)
 print("MCP smoke: disk_protect guard, delete, disk_restore, disk_protected, size limits: PASS")
 PY
+
+# Read through "/", the data volume is counted twice: under /System/Volumes/Data and again through
+# the firmlinks (/Users, /Applications, ...). History is the scan-shaped command that answers without scanning.
+"$python" - "$binary" <<'PY'
+import json, subprocess, sys
+
+binary = sys.argv[1]
+cli = json.loads(subprocess.run([binary, "history", "/", "--json"], text=True, capture_output=True, timeout=10, check=True).stdout)
+assert cli["path"] == "/System/Volumes/Data", cli
+messages = [{"jsonrpc": "2.0", "id": 0, "method": "initialize", "params": {"protocolVersion": "2025-06-18"}},
+            {"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "disk_history", "arguments": {"path": "/"}}}]
+server = subprocess.run([binary, "mcp"], input="".join(json.dumps(m) + "\n" for m in messages),
+                        text=True, capture_output=True, timeout=10)
+assert server.returncode == 0, server.stderr
+reply = next(r for r in map(json.loads, server.stdout.splitlines()) if r["id"] == 1)["result"]
+assert not reply.get("isError") and reply["structuredContent"]["path"] == "/System/Volumes/Data", reply
+print("MCP smoke: / reads the data volume (history, disk_history): PASS")
+PY

@@ -53,6 +53,12 @@ The app's text lives in `Localization/Localizable.xcstrings`; keys are the Tradi
 text. After changing UI text run `scripts/i18n-sync.sh`, translate the new entries, then
 `scripts/i18n-check.py --strict`.
 
+## Changelog
+
+A bug found in Hoard is fixed here directly rather than filed as an issue. The fix lands with a check
+that fails without it, and `CHANGELOG.md` gets an entry under `[Unreleased]` › **Fixed** saying what
+people saw, why it happened, and what changed. At release, `[Unreleased]` becomes the new version.
+
 ## Releases
 
 `scripts/release.sh <version>` builds the app with an ad-hoc signature and writes to `dist/` the app

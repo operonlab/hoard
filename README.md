@@ -9,10 +9,30 @@
 <p align="center">English · <a href="README.zh-Hant.md">繁體中文</a> · <a href="README.ja.md">日本語</a> · <a href="README.ko.md">한국어</a></p>
 
 Hoard shows where your Mac's disk space went. Every folder is drawn as an area the size of what it
-holds, so the biggest things are the biggest shapes. It finds what you can clear, and lets you or an
-AI agent working for you help decide. It never deletes anything by itself.
+holds, so the biggest things are the biggest shapes. It is a tool, not a cleaner: it measures and
+explains, and what to remove is up to you, or to you and an AI agent you bring in. Hoard never
+deletes anything by itself.
 
 <p align="center"><img src="docs/screenshots/en-map.png" width="900" alt="Hoard's space map of a demo folder"></p>
+
+## What sets it apart
+
+- **See what grew.** Recent Changes compares the disk with an earlier scan and lists what grew,
+  shrank, appeared or disappeared, down to the file. `hoard diff` answers the same question on the
+  command line.
+- **No rescan after you delete.** What you move to the Trash leaves the map at once, and changes
+  made elsewhere show up while Hoard is open.
+- **Numbers you can trust.** Hardlinks and APFS clones are counted once. A folder Hoard cannot read
+  is marked unknown, never zero. It never downloads iCloud files to measure them.
+- **Nothing goes without your yes.** Move to Trash asks first, refuses anything you protected and
+  never takes the last copy of a duplicate. ⌘Z puts the last batch back.
+- **Open to AI agents.** A command-line tool with JSON output, an MCP server and a Claude Code skill.
+  Agents can read everything, add protection and put back a guarded file that was deleted; they
+  cannot delete, move or unprotect anything.
+- **Free, open source, offline.** MIT licensed. No network connections, no account, nothing
+  collected.
+
+<p align="center"><img src="docs/screenshots/en-changes.png" width="900" alt="Recent Changes in a demo folder: what grew, shrank, appeared and disappeared since the last scan"></p>
 
 ## Why a squirrel
 
@@ -23,26 +43,17 @@ same way: it remembers where your space went, protects what you mark, and leaves
 ## What it does
 
 - **Space map and list.** Scans a whole disk in seconds (about 900,000 files in about 4 seconds on a
-  Mac mini with Apple silicon). Hardlinks and APFS clones are counted once.
-- **Stays current while open.** File changes show up on their own; the toolbar shows when it is
-  updating.
+  Mac mini with Apple silicon).
 - **Finds what to clear.** Largest files, files you have not opened in a long time, file types,
   duplicates, similar photos, and what grew since the last scan.
 - **Uninstalls apps with their leftovers** (caches, preferences, containers), after you confirm.
 - **Protects what matters.** *Lock* a file or folder so it cannot be deleted or moved; *guard* one so
   Hoard puts it back if it is deleted.
-- **Honest numbers.** Folders it cannot read are marked as unknown, never as zero. It never downloads
-  iCloud files to measure them.
-- **For AI agents.** A command-line tool with JSON output, an MCP server and a Claude Code skill.
-  Agents can read everything, add protection and put back a guarded file that was deleted; they
-  cannot delete, move or unprotect anything.
 - English, 繁體中文, 日本語 and 한국어.
 
 | Largest files | File types | Long-unused files |
 |---|---|---|
 | <img src="docs/screenshots/en-largest.png" alt="Largest files"> | <img src="docs/screenshots/en-types.png" alt="File types"> | <img src="docs/screenshots/en-stale.png" alt="Long-unused files"> |
-
-Hoard makes no network connections, needs no account and collects nothing.
 
 ## Install
 

@@ -25,7 +25,7 @@ deletes anything by itself.
 - **Numbers you can trust.** Hardlinks and APFS clones are counted once. A folder Hoard cannot read
   is marked unknown, never zero. It never downloads iCloud files to measure them.
 - **System Data, explained.** For the space no folder shows, much of which Storage settings lumps into
-  System Data, Hoard lists what it can measure (swap, other volumes, Time Machine snapshots,
+  System Data, Hoard lists what it can measure or count (swap, other volumes, Time Machine snapshots,
   unreadable folders) and what remains. See [What is System Data?](docs/system-data.md)
 - **Nothing goes without your yes.** Move to Trash asks first and refuses anything you protected; in
   the duplicates list it never takes the last copy. ⌘Z puts the last batch back.

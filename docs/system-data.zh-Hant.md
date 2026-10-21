@@ -24,13 +24,13 @@
 | **虛擬記憶體磁區**，底下有**交換檔**和**睡眠映像檔** | `/System/Volumes/VM`：記憶體不夠時 macOS 寫出的交換檔，以及部分 Mac 為睡眠保留的映像檔。Apple 說明裡的「VM 檔案」就是這些。 | 不要用刪檔的方式：它們屬於正在運作的系統。需要的記憶體變少時它們就會變小，例如關掉很吃記憶體的 App，或重新開機之後。 |
 | **其他已掛載磁區** | 同一個容器裡的其他磁區，主要是存放 macOS 本身的唯讀系統磁區（[Apple](https://support.apple.com/zh-tw/guide/security/secd698747c9/web)）和 Preboot。 | 不能，它們是 macOS 的一部分。 |
 | **Time Machine 本機快照** | Time Machine 保留了幾份本機快照。macOS 只列出快照，不提供大小，所以這一項只顯示份數。用 `tmutil listlocalsnapshots /` 也能看到同一份清單。 | 通常不用管：Time Machine 會隨著快照變舊、或硬碟需要空間時自動刪除。想提早清掉，可以在 Time Machine 設定把**備份頻率**改成**手動**，等幾分鐘，再把自動備份打開（[Apple](https://support.apple.com/zh-tw/102154)）。 |
-| **無法讀取的資料夾** | Hoard 沒有權限讀取的資料夾，大小無法得知。 | 給 Hoard「完整磁碟取用權限」後重新掃描。 |
-| **其餘無法對上的空間** | 已用空間扣掉上面所有有大小的項目後剩下的部分：沒有掛載的磁區（包括 Recovery）、檔案系統自己的紀錄、其他 App 建立的快照，以及 Hoard 讀不到的資料夾。 | 先看上面幾項。有資料夾讀不到、或快照大小未知時，這個數字只是估計。 |
+| **無法讀取的資料夾** | Hoard 沒能完整讀完的資料夾，通常是因為沒有權限。大小無法得知。 | 給 Hoard「完整磁碟取用權限」後重新掃描。 |
+| **其餘無法對上的空間** | 已用空間扣掉上面所有有大小的項目後剩下的部分：沒有掛載的磁區（包括 Recovery）、檔案系統自己的紀錄、只被快照占住的空間（Time Machine 和其他 App 的快照都算），以及 Hoard 讀不到的資料夾。 | 先看上面幾項。有資料夾讀不到、或快照大小未知時，這個數字只是估計。 |
 | **可清除空間** | macOS 在需要時可以自己釋放的空間：macOS 願意留給重要檔案的空間（[Apple](https://developer.apple.com/documentation/foundation/urlresourcekey/volumeavailablecapacityforimportantusagekey)）減去單純的可用空間。 | macOS 需要時會自己釋放。 |
 
 ## 為什麼 Hoard 和系統設定的數字不一樣
 
-- **已用空間。** Apple 說明 Mac 會把快照占用的空間算成可用空間（[Apple](https://support.apple.com/zh-tw/102154)）。Hoard 的已用空間直接來自檔案系統，會把這部分算成已用，再分別放進「Time Machine 本機快照」和「可清除空間」說明。所以 Hoard 的已用空間常常比系統設定顯示的多。
+- **已用空間。** Apple 說明 Mac 會把快照占用的空間算成可用空間（[Apple](https://support.apple.com/zh-tw/102154)）。Hoard 的已用空間直接來自檔案系統，會把這部分算成已用。macOS 不提供快照的大小，所以只被快照占住的空間不在任何資料夾裡，會落到「其餘無法對上的空間」。所以 Hoard 的已用空間常常比系統設定顯示的多。
 - **分類和資料夾。** 系統設定把每個檔案歸到一個類別（應用程式、文件、系統資料⋯）；Hoard 顯示的是資料夾。系統設定算成「系統資料」的快取，在 Hoard 的地圖上就是你家目錄裡的一個資料夾。
 - **共用的儲存空間。** 硬連結和 APFS 分身只算一次，和硬碟實際存放的方式一樣。
 

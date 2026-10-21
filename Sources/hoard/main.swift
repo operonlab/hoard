@@ -57,11 +57,13 @@ private struct Args {
             path = command == "hidden" ? Self.dataVolume : ""
         } else {
             guard args.count >= 2 else { throw CLIError.usage(usage) }
-            // "/" is the read-only system volume; the disk people mean is the data volume. Counting "/"
-            // reports the data volume both as scanned (through firmlinks) and as another volume.
+            // "/" is the read-only system volume; the disk people mean is the data volume. Read through
+            // "/", the data volume is counted twice: under /System/Volumes/Data and through the firmlinks.
+            // Protection keeps the path as given: it records system paths (`PathForms.systemPath`).
             let given = command == "uninstall-plan" && !args[1].hasPrefix("/") && !args[1].hasPrefix("~")
                 ? args[1] : absolute(args[1])
-            path = command == "hidden" && given == "/" ? Self.dataVolume : given; i = 2
+            let literal = ["uninstall-plan", "protect", "protected", "snapshot"].contains(command)
+            path = given == "/" && !literal ? Self.dataVolume : given; i = 2
         }
         while i < args.count {
             let flag = args[i]

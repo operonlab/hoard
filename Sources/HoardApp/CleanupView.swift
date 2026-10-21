@@ -8,7 +8,14 @@ struct CleanupView: View {
     var body: some View {
         ScrollView {
             LazyVStack(alignment: .leading, spacing: 18) {
-                ViewHeader(title: String(localized: "可以清掉的"), sentence: summary, busy: model.cleanupPending) { EmptyView() }
+                ViewHeader(title: String(localized: "可以清掉的"), sentence: summary, busy: model.cleanupPending) {
+                    Button("全部丟到垃圾桶…") {
+                        let rows = liveSuggestions
+                        model.requestBatchTrash(rows.map(\.node), source: "suggest", reviewCount: reviewCount(rows))
+                    }
+                    .disabled(liveSuggestions.isEmpty)
+                    .help("把所有清理建議一起丟到垃圾桶；會先列出項目讓你確認。")
+                }
                 hiddenCard
                 if let error = model.cleanupError {
                     Label("無法產生清理建議：\(error)", systemImage: "exclamationmark.triangle")
@@ -28,7 +35,19 @@ struct CleanupView: View {
                         let rows = report.suggestions.filter { section.categories.contains($0.category) }
                         if !rows.isEmpty {
                             VStack(alignment: .leading, spacing: 6) {
-                                Text(section.title).font(.headline)
+                                HStack {
+                                    Text(section.title).font(.headline)
+                                    Spacer()
+                                    let selectable = rows.filter { selectableSuggestion($0) }
+                                    let allPicked = !selectable.isEmpty && selectable.allSatisfy { model.suggestionPicks[$0.node] == $0.path }
+                                    Button(allPicked ? "取消全選" : "全選這一類") {
+                                        for row in selectable {
+                                            if allPicked { model.suggestionPicks.removeValue(forKey: row.node) }
+                                            else { model.suggestionPicks[row.node] = row.path }
+                                        }
+                                    }
+                                    .disabled(selectable.isEmpty)
+                                }
                                 ForEach(rows, id: \.node) { row in
                                     SuggestionRow(model: model, suggestion: row)
                                 }
@@ -47,6 +66,84 @@ struct CleanupView: View {
             .padding(14)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .safeAreaInset(edge: .bottom) {
+            if !model.validPicks(model.suggestionPicks).isEmpty ||
+                !model.validPicks(model.duplicatePicks).isEmpty ||
+                !model.validPicks(model.similarPicks).isEmpty {
+                selectionBar
+            }
+        }
+        // The similar-photo results live in their view and are gone after leaving the page; picks must go too.
+        .onAppear { model.similarPicks = [:] }
+        .onChange(of: model.generation) { _, _ in clearPicks() }
+        .onChange(of: model.scope) { _, _ in clearPicks() }
+        .onChange(of: model.tree.map(ObjectIdentifier.init)) { _, _ in clearPicks() }
+        .onChange(of: model.cleanupReport) { _, report in
+            let paths = Dictionary(uniqueKeysWithValues: (report?.suggestions ?? []).map { ($0.node, $0.path) })
+            model.suggestionPicks = model.suggestionPicks.filter { paths[$0.key] == $0.value }
+        }
+    }
+
+    private var liveSuggestions: [Suggestion] {
+        model.cleanupReport?.suggestions.filter { model.isLive($0.node) && model.tree?.path(of: $0.node) == $0.path } ?? []
+    }
+
+    private func selectableSuggestion(_ row: Suggestion) -> Bool {
+        model.isLive(row.node) && model.tree?.path(of: row.node) == row.path && model.trashBlockReason(row.node) == nil
+    }
+
+    private func reviewCount(_ rows: [Suggestion]) -> Int {
+        rows.filter { $0.safety == .review && model.trashBlockReason($0.node) == nil }.count
+    }
+
+    private func clearPicks() {
+        model.suggestionPicks = [:]
+        model.duplicatePicks = [:]
+        model.similarPicks = [:]
+    }
+
+    private var selectionBar: some View {
+        let suggestions = model.validPicks(model.suggestionPicks)
+        let duplicates = model.validPicks(model.duplicatePicks)
+        let similar = model.validPicks(model.similarPicks)
+        return VStack(alignment: .leading, spacing: 8) {
+            if !suggestions.isEmpty {
+                HStack {
+                    Text("清理建議：已選 \(suggestions.count) 項，共 \(pickedSize(suggestions))")
+                    Spacer()
+                    Button("取消選取") { model.suggestionPicks = [:] }
+                    Button("丟到垃圾桶…") {
+                        let rows = liveSuggestions.filter { suggestions.contains($0.node) }
+                        model.requestBatchTrash(suggestions, source: "suggest", reviewCount: reviewCount(rows))
+                    }
+                }
+            }
+            if !duplicates.isEmpty {
+                HStack {
+                    Text("重複的檔案：已選 \(duplicates.count) 份，共 \(pickedSize(duplicates))")
+                    Spacer()
+                    Button("取消選取") { model.duplicatePicks = [:] }
+                    Button("丟到垃圾桶…") { model.requestDuplicateBatch(model.duplicateReport?.groups ?? [], picked: Set(duplicates)) }
+                }
+            }
+            if !similar.isEmpty {
+                HStack {
+                    Text("相似的照片：已選 \(similar.count) 張，共 \(pickedSize(similar))")
+                    Spacer()
+                    Button("取消選取") { model.similarPicks = [:] }
+                    Button("丟到垃圾桶…") { model.requestBatchTrash(similar, source: "similar") }
+                }
+            }
+        }
+        .padding(.horizontal, 12).padding(.vertical, 8)
+        .background(.bar)
+        .overlay(alignment: .top) { Divider() }
+    }
+
+    private func pickedSize(_ ids: [NodeID]) -> String {
+        guard let tree = model.tree else { return String(localized: "無法得知") }
+        let bytes = ids.reduce(Int64(0)) { $0 + tree[$1].totalAlloc }
+        return ids.contains { tree[$0].status != .complete } ? String(localized: "至少 \(Fmt.bytes(bytes))") : Fmt.bytes(bytes)
     }
 
     private var summary: String {
@@ -121,6 +218,8 @@ struct CleanupView: View {
                 .foregroundStyle(.secondary)
             HStack {
                 Picker("最小檔案", selection: $model.duplicateMinSize) {
+                    Text("1 MB").tag(Int64(1_000_000))
+                    Text("10 MB").tag(Int64(10_000_000))
                     Text("50 MB").tag(Int64(50_000_000))
                     Text("100 MB").tag(Int64(100_000_000))
                     Text("1 GB").tag(Int64(1_000_000_000))
@@ -138,6 +237,15 @@ struct CleanupView: View {
                     .foregroundStyle(.secondary)
             }
             if let report = model.duplicateReport {
+                if report.groups.contains(where: { $0.stage == .bytes }) {
+                    Button("每組只留一份…") {
+                        let picked = Set(report.groups.filter { $0.stage == .bytes }.flatMap { group in
+                            group.members.filter { model.isLive($0.node) && $0.node != group.keeper(remains: model.remainsAfterTrash)?.node }.map(\.node)
+                        })
+                        model.requestDuplicateBatch(report.groups, picked: picked)
+                    }
+                    .help("每組保留路徑排序最前面的一份，其餘丟到垃圾桶；會先列出項目讓你確認。")
+                }
                 let refused = report.nothingRead(because: Materialization.refusedDetail)
                 if model.cleanupReport != nil {
                     Text("重複檔案和上面的建議可能重疊，兩個數字不要相加。")
@@ -156,6 +264,15 @@ struct CleanupView: View {
                     DisclosureGroup(group.stage == .bytes
                                     ? String(localized: "\(Fmt.bytes(group.logicalSize)) × \(group.members.count) 份・可考慮清理 \(Fmt.bytes(group.reclaimableBytes))")
                                     : String(localized: "\(Fmt.bytes(group.logicalSize)) × \(group.members.count) 份・尚待完整比對")) {
+                        if group.stage == .bytes {
+                            Button("只留一份") {
+                                let keeper = group.keeper(remains: model.remainsAfterTrash)?.node
+                                for member in group.members {
+                                    if member.node != keeper && model.isLive(member.node) { model.duplicatePicks[member.node] = member.path }
+                                    else { model.duplicatePicks.removeValue(forKey: member.node) }
+                                }
+                            }
+                        }
                         if group.stage != .bytes {
                             Text("這組尚未逐位元組確認，請先核對內容。")
                                 .foregroundStyle(.orange)
@@ -217,6 +334,13 @@ private struct SuggestionRow: View {
         let protected = !model.protection.kinds(key).isEmpty ||
             (isDirectory && !model.protection.inside(key).isEmpty)
         HStack(alignment: .top, spacing: 8) {
+            Toggle(isOn: Binding(get: { model.suggestionPicks[id] == suggestion.path }, set: { picked in
+                if picked { model.suggestionPicks[id] = suggestion.path }
+                else { model.suggestionPicks.removeValue(forKey: id) }
+            })) { Text((suggestion.path as NSString).lastPathComponent) }
+                .toggleStyle(.checkbox).labelsHidden()
+                .accessibilityLabel((suggestion.path as NSString).lastPathComponent)
+                .disabled(!live || blocked != nil)
             Image(systemName: isDirectory ? "folder" : "doc").foregroundStyle(.secondary)
             VStack(alignment: .leading, spacing: 3) {
                 HStack {
@@ -266,6 +390,20 @@ private struct DuplicateMemberRow: View {
         let live = model.isLive(member.node) && model.tree?.path(of: member.node) == member.path
         let otherLive = others.contains { model.remainsAfterTrash($0) }
         HStack {
+            if confirmed && live {
+                let picked = model.duplicatePicks[member.node] == member.path
+                let canCheck = others.contains { other in
+                    model.remainsAfterTrash(other) && model.duplicatePicks[other.node] != other.path
+                }
+                Toggle(isOn: Binding(get: { picked }, set: { selected in
+                    if selected { model.duplicatePicks[member.node] = member.path }
+                    else { model.duplicatePicks.removeValue(forKey: member.node) }
+                })) { Text((member.path as NSString).lastPathComponent) }
+                    .toggleStyle(.checkbox).labelsHidden()
+                    .accessibilityLabel((member.path as NSString).lastPathComponent)
+                    .disabled(!picked && !canCheck)
+                    .help(!picked && !canCheck ? String(localized: "這組至少要留一份。") : member.path)
+            }
             Text((member.path as NSString).lastPathComponent)
             Text(Fmt.tildePath((member.path as NSString).deletingLastPathComponent))
                 .foregroundStyle(.secondary).lineLimit(1)

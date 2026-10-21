@@ -133,6 +133,7 @@ extension AppModel {
         let run = duplicateRun, token = generation, dir = scope
         let nodes = tree.nodes, rootPath = tree.rootPath, minSize = duplicateMinSize
         duplicateReport = nil
+        duplicatePicks = [:]
         duplicateBaseline = [:]
         duplicateProgress = nil
         duplicatePending = true
@@ -182,6 +183,7 @@ extension AppModel {
         duplicatePending = false
         duplicateProgress = nil
         duplicateReport = nil
+        duplicatePicks = [:]
         duplicateBaseline = [:]
     }
 }

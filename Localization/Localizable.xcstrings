@@ -1721,6 +1721,28 @@
         }
       }
     },
+    "1 MB" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 MB"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 MB"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 MB"
+          }
+        }
+      }
+    },
     "1. 按「打開系統設定」" : {
       "localizations" : {
         "en" : {
@@ -1739,6 +1761,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "1. ‘시스템 설정 열기’를 클릭합니다."
+          }
+        }
+      }
+    },
+    "10 MB" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "10 MB"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "10 MB"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "10 MB"
           }
         }
       }
@@ -2183,6 +2227,50 @@
         }
       }
     },
+    "Gradle 專案快取，可重新建立。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gradle project cache. It can be recreated."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gradle プロジェクトのキャッシュです。再作成できます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gradle 프로젝트 캐시입니다. 다시 만들 수 있습니다."
+          }
+        }
+      }
+    },
+    "HTTP 儲存空間" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HTTP storage"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HTTP ストレージ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HTTP 저장 공간"
+          }
+        }
+      }
+    },
     "Hoard" : {
       "localizations" : {
         "en" : {
@@ -2289,50 +2377,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hoard가 이 작업을 완료할 수 없습니다(%@)."
-          }
-        }
-      }
-    },
-    "Gradle 專案快取，可重新建立。" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gradle project cache. It can be recreated."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gradle プロジェクトのキャッシュです。再作成できます。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gradle 프로젝트 캐시입니다. 다시 만들 수 있습니다."
-          }
-        }
-      }
-    },
-    "HTTP 儲存空間" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "HTTP storage"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "HTTP ストレージ"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "HTTP 저장 공간"
           }
         }
       }
@@ -4223,6 +4267,28 @@
         }
       }
     },
+    "全選這一類" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select All in This Category"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このカテゴリをすべて選択"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 범주 모두 선택"
+          }
+        }
+      }
+    },
     "全部" : {
       "localizations" : {
         "en" : {
@@ -4241,6 +4307,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "전체"
+          }
+        }
+      }
+    },
+    "全部丟到垃圾桶…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move All to Trash…"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "すべてゴミ箱に入れる…"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "모두 휴지통으로 이동…"
           }
         }
       }
@@ -4375,6 +4463,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld개 항목이 다른 파일과 디스크 공간을 공유하므로(APFS 복제본 또는 하드 링크) 실제로 확보되는 공간이 더 적을 수 있습니다."
+          }
+        }
+      }
+    },
+    "其中 %lld 項標示為「需要你判斷」，丟掉前請確認不再需要。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld items are marked “Needs your review.” Confirm you no longer need them before moving them to Trash."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld項目は「確認が必要」と表示されています。ゴミ箱に入れる前に不要か確認してください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld개 항목이 ‘직접 확인 필요’로 표시되어 있습니다. 휴지통으로 이동하기 전에 필요 없는지 확인하세요."
           }
         }
       }
@@ -4699,6 +4809,28 @@
         }
       }
     },
+    "取消全選" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deselect All"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "すべての選択を解除"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "모두 선택 해제"
+          }
+        }
+      }
+    },
     "取消標示" : {
       "localizations" : {
         "en" : {
@@ -4717,6 +4849,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "강조 표시 해제"
+          }
+        }
+      }
+    },
+    "取消選取" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deselect"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選択を解除"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "선택 해제"
           }
         }
       }
@@ -4961,6 +5115,50 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "‘%@’만 강조 표시"
+          }
+        }
+      }
+    },
+    "只留一份" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep One"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1つだけ残す"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "하나만 남기기"
+          }
+        }
+      }
+    },
+    "只留建議保留的" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep the Suggested One"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "推奨された1枚だけ残す"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "권장 사진만 남기기"
           }
         }
       }
@@ -5583,6 +5781,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "이미 켰다면 Hoard를 종료한 다음 다시 여십시오."
+          }
+        }
+      }
+    },
+    "它在比對之後已經不在原處，請重新找重複檔。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "It is no longer at the compared location. Search for duplicates again."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "比較後に元の場所から移動されました。重複ファイルを再検索してください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "비교 후 원래 위치에 없습니다. 중복 파일을 다시 찾으세요."
           }
         }
       }
@@ -7319,6 +7539,28 @@
         }
       }
     },
+    "把所有清理建議一起丟到垃圾桶；會先列出項目讓你確認。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move all Cleanup suggestions to Trash together; review the list before confirming."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "すべてのクリーンアップ候補をまとめてゴミ箱に入れます。先に一覧を確認できます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "모든 정리 제안을 함께 휴지통으로 이동합니다. 먼저 목록을 확인할 수 있습니다."
+          }
+        }
+      }
+    },
     "拷貝路徑" : {
       "localizations" : {
         "en" : {
@@ -8163,6 +8405,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "폴더 %lld개를 읽을 수 없어 실제로는 더 많을 수 있습니다."
+          }
+        }
+      }
+    },
+    "有 %lld 個項目沒有丟到垃圾桶" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld items were not moved to Trash"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld項目をゴミ箱に入れられませんでした"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld개 항목이 휴지통으로 이동되지 않았습니다"
           }
         }
       }
@@ -9017,6 +9281,50 @@
         }
       }
     },
+    "每組保留路徑排序最前面的一份，其餘丟到垃圾桶；會先列出項目讓你確認。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep the first copy in path order in each group and move the rest to Trash; review the list before confirming."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "各グループでパス順の最初の1つを残し、ほかをゴミ箱に入れます。先に一覧を確認できます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "각 그룹에서 경로순 첫 복사본을 남기고 나머지를 휴지통으로 이동합니다. 먼저 목록을 확인할 수 있습니다."
+          }
+        }
+      }
+    },
+    "每組只留一份…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep One of Each…"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "各グループで1つだけ残す…"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "그룹마다 하나만 남기기…"
+          }
+        }
+      }
+    },
     "比例" : {
       "localizations" : {
         "en" : {
@@ -9123,6 +9431,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "수정하거나 접근하지 않았고 크기가 최소"
+          }
+        }
+      }
+    },
+    "沒有可以丟到垃圾桶的項目" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No items can be moved to Trash"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ゴミ箱に入れられる項目はありません"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "휴지통으로 이동할 수 있는 항목이 없습니다"
           }
         }
       }
@@ -9475,6 +9805,34 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "목록, %@"
+          }
+        }
+      }
+    },
+    "清理建議：已選 %lld 項，共 %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cleanup: %lld selected, %@ total"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "クリーンアップ：%lld 項目を選択、合計 %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "정리 제안: %lld개 선택, 총 %@"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "清理建議：已選 %1$lld 項，共 %2$@"
           }
         }
       }
@@ -10443,6 +10801,28 @@
         }
       }
     },
+    "略過 %lld 項，不會丟到垃圾桶：" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skipping %lld items; they will not be moved to Trash:"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld項目をスキップします。ゴミ箱には入りません："
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld개 항목을 건너뜁니다. 휴지통으로 이동되지 않습니다:"
+          }
+        }
+      }
+    },
     "的檔案" : {
       "localizations" : {
         "en" : {
@@ -10703,6 +11083,34 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "비슷한 사진"
+          }
+        }
+      }
+    },
+    "相似的照片：已選 %lld 張，共 %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Similar Photos: %lld selected, %@ total"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "類似した写真：%lld 枚を選択、合計 %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "비슷한 사진: %lld장 선택, 총 %@"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "相似的照片：已選 %1$lld 張，共 %2$@"
           }
         }
       }
@@ -13081,6 +13489,50 @@
         }
       }
     },
+    "這組的每一份都被選了，至少要留一份。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every copy in this group is selected. At least one must remain."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このグループのすべてが選択されています。少なくとも1つ残してください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 그룹의 모든 복사본이 선택되었습니다. 최소 하나는 남겨야 합니다."
+          }
+        }
+      }
+    },
+    "這組至少要留一份。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "At least one copy must remain in this group."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このグループには少なくとも1つ残してください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 그룹에는 최소 하나를 남겨야 합니다."
+          }
+        }
+      }
+    },
     "這裡合併了 %lld 個較小的項目，共 %@。" : {
       "localizations" : {
         "en" : {
@@ -13289,6 +13741,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ほかに %lld 件の項目"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "추가 항목 %lld개"
+          }
+        }
+      }
+    },
+    "還有 %lld 項" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld more items"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ほかに %lld 件"
           }
         },
         "ko" : {
@@ -13625,6 +14099,34 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "중복 파일"
+          }
+        }
+      }
+    },
+    "重複的檔案：已選 %lld 份，共 %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Duplicate Files: %lld selected, %@ total"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重複ファイル：%lld 個を選択、合計 %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "중복 파일: %lld개 선택, 총 %@"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "重複的檔案：已選 %1$lld 份，共 %2$@"
           }
         }
       }

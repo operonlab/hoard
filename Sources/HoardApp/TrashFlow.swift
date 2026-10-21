@@ -22,8 +22,10 @@ struct TrashRequest: Identifiable {
     /// The tree the items' node ids belong to. Weak, and compared by identity: an address (an
     /// ObjectIdentifier) can be reused by the next tree once this one is freed.
     weak var tree: FileTree?
-    /// Set for a duplicate: the copy being trashed and the other copies, one of which must remain.
-    var duplicate: (copy: DuplicateCopy, others: [DuplicateCopy])?
+    /// For each duplicate being trashed, the other copies, one of which must remain.
+    var duplicates: [NodeID: (copy: DuplicateCopy, others: [DuplicateCopy])] = [:]
+    var skipped: [(name: String, reason: String)] = []
+    var reviewCount = 0
     var total: Int64 { items.reduce(0) { $0 + $1.bytes } }
     var totalText: String {
         if items.contains(where: { $0.status != .complete }) {
@@ -44,6 +46,10 @@ struct TrashedBatch: Identifiable {
 }
 
 extension AppModel {
+    func validPicks(_ picks: [NodeID: String]) -> [NodeID] {
+        picks.keys.filter { id in isLive(id) && tree?.path(of: id) == picks[id] }.sorted()
+    }
+
     /// Asks to trash one copy of a duplicate group. Nothing is offered unless the copy and at least one
     /// other copy are still live in the tree at the paths the comparison used.
     func requestDuplicateTrash(_ member: DuplicateMember, others: [DuplicateMember]) {
@@ -53,7 +59,7 @@ extension AppModel {
         guard !kept.isEmpty else { return }
         requestTrash([member.node], source: "duplicates")
         guard trashRequest?.items.map(\.id) == [member.node] else { return }
-        trashRequest?.duplicate = (copy, kept)
+        trashRequest?.duplicates[member.node] = (copy, kept)
     }
 
     /// A copy that can be what stays: live at its compared path, and not itself in a Trash (emptying
@@ -69,19 +75,7 @@ extension AppModel {
         guard let tree else { return }
         let allowed = ids.filter { trashBlockReason($0) == nil }
         guard !allowed.isEmpty, allowed.count == ids.count else { return }
-        let home = NSHomeDirectory()
-        // Nested selections: trashing a folder already takes its contents.
-        let paths = Set(allowed.map { tree.path(of: $0) })
-        let items = allowed.compactMap { id -> TrashItem? in
-            let path = tree.path(of: id)
-            if paths.contains(where: { path.hasPrefix($0 + "/") }) { return nil }
-            let node = tree[id]
-            let system = Self.systemPath(path)
-            return TrashItem(id: id, path: path, name: node.name, bytes: node.totalAlloc, status: node.status,
-                             isDirectory: node.isDirectory,
-                             identity: FileIdentity(node), sharesSpace: sharesSpace(id, in: tree),
-                             isAppData: system.hasPrefix(home + "/Library/") || path.contains(".app/"))
-        }
+        let items = trashItems(allowed, in: tree)
         let origin = source ?? { () -> String in
             switch view {
             case .map: return "map"
@@ -97,6 +91,80 @@ extension AppModel {
         trashRequest = TrashRequest(items: items, source: origin, tree: tree)
     }
 
+    func requestBatchTrash(_ ids: [NodeID], source: String, reviewCount: Int = 0,
+                           duplicates: [NodeID: (copy: DuplicateCopy, others: [DuplicateCopy])] = [:],
+                           refused: [(name: String, reason: String)] = []) {
+        guard let tree else { return }
+        var skipped = refused
+        var allowed: [NodeID] = []
+        for id in ids {
+            if let reason = trashBlockReason(id) {
+                let name = isLive(id) ? tree[id].name : (tree.path(of: id) as NSString).lastPathComponent
+                skipped.append((name, reason))
+            } else {
+                allowed.append(id)
+            }
+        }
+        guard !allowed.isEmpty else {
+            alert = AppAlert(title: String(localized: "沒有可以丟到垃圾桶的項目"), message: Self.batchDetails(skipped))
+            return
+        }
+        let allowedSet = Set(allowed)
+        trashRequest = TrashRequest(items: trashItems(allowed, in: tree), source: source, tree: tree,
+                                    duplicates: duplicates.filter { allowedSet.contains($0.key) },
+                                    skipped: skipped, reviewCount: reviewCount)
+    }
+
+    private static func batchDetails(_ failures: [(name: String, reason: String)]) -> String {
+        let lines = failures.prefix(10).map { "「\($0.name)」：\($0.reason)" }
+        return (lines + (failures.count > 10 ? [String(localized: "還有 \(failures.count - 10) 項")] : [])).joined(separator: "\n")
+    }
+
+    func requestDuplicateBatch(_ groups: [DuplicateGroup], picked: Set<NodeID>) {
+        var ids: [NodeID] = []
+        var duplicates: [NodeID: (copy: DuplicateCopy, others: [DuplicateCopy])] = [:]
+        var refused: [(name: String, reason: String)] = []
+        let keepReason = String(localized: "這組的每一份都被選了，至少要留一份。")
+        let changedReason = String(localized: "它在比對之後已經不在原處，請重新找重複檔。")
+        for group in groups where group.stage == .bytes {
+            guard let plan = group.trashPlan(picked: picked, remains: remainsAfterTrash) else {
+                refused += group.members.filter { picked.contains($0.node) }.map { (($0.path as NSString).lastPathComponent, keepReason) }
+                continue
+            }
+            let kept = plan.kept.compactMap { duplicateBaseline[$0.node] }
+            for member in plan.trash {
+                guard isLive(member.node), tree?.path(of: member.node) == member.path,
+                      let copy = duplicateBaseline[member.node] else {
+                    refused.append(((member.path as NSString).lastPathComponent, changedReason))
+                    continue
+                }
+                guard !kept.isEmpty else {
+                    refused.append(((member.path as NSString).lastPathComponent, keepReason))
+                    continue
+                }
+                ids.append(member.node)
+                duplicates[member.node] = (copy, kept)
+            }
+        }
+        requestBatchTrash(ids, source: "duplicates", duplicates: duplicates, refused: refused)
+    }
+
+    private func trashItems(_ allowed: [NodeID], in tree: FileTree) -> [TrashItem] {
+        let home = NSHomeDirectory()
+        // Nested selections: trashing a folder already takes its contents.
+        let paths = Set(allowed.map { tree.path(of: $0) })
+        return allowed.compactMap { id -> TrashItem? in
+            let path = tree.path(of: id)
+            if paths.contains(where: { path.hasPrefix($0 + "/") }) { return nil }
+            let node = tree[id]
+            let system = Self.systemPath(path)
+            return TrashItem(id: id, path: path, name: node.name, bytes: node.totalAlloc, status: node.status,
+                             isDirectory: node.isDirectory,
+                             identity: FileIdentity(node), sharesSpace: sharesSpace(id, in: tree),
+                             isAppData: system.hasPrefix(home + "/Library/") || path.contains(".app/"))
+        }
+    }
+
     /// Hardlinked or APFS-cloned content inside `id` (bounded walk; a huge folder stops early).
     private func sharesSpace(_ id: NodeID, in tree: FileTree) -> Bool {
         var stack = [id]
@@ -106,7 +174,7 @@ extension AppModel {
             let node = tree[cur]
             if node.isRemoved { continue }
             if !node.isDirectory {
-                if node.linkCount > 1 || node.cloneID != 0 || node.flags.contains(.cloneShared) { return true }
+                if node.sharesStorage { return true }
                 continue
             }
             var child = node.firstChild
@@ -139,39 +207,35 @@ extension AppModel {
     /// protection while the sheet was open) and that its path still names the same file.
     private func moveToTrash(_ request: TrashRequest, protected: [ProtectedItem], readError: String?) {
         guard let tree else { return }
+        if readError != nil {
+            alert = AppAlert(title: String(localized: "沒有丟到垃圾桶"),
+                             message: String(localized: "讀不到保護清單，Hoard 無法確認它有沒有受保護，所以沒有動它。"))
+            return
+        }
         var moved: [TrashedBatch.Entry] = []
         var movedCount = 0
         var bytes: Int64 = 0
         var partial = false
-        var failure: AppAlert?
+        var failures: [(name: String, reason: String)] = []
         var logged: [CleanupLogEntry] = []
         for item in request.items {
-            if readError != nil {
-                failure = AppAlert(title: String(localized: "無法把「\(item.name)」丟到垃圾桶"),
-                                   message: String(localized: "讀不到保護清單，Hoard 無法確認它有沒有受保護，所以沒有動它。"))
-                continue
-            }
             if let kinds = Self.trashConflict(key: protectionKey(forTreePath: item.path), isDirectory: item.isDirectory, in: protected) {
-                failure = AppAlert(title: String(localized: "無法把「\(item.name)」丟到垃圾桶"),
-                                   message: kinds.isEmpty ? String(localized: "「\(item.name)」裡面有受保護的項目。要先在「受保護」裡解除保護。")
-                                       : Self.protectedTrashText(item.name, kinds))
+                failures.append((item.name, kinds.isEmpty ? String(localized: "「\(item.name)」裡面有受保護的項目。要先在「受保護」裡解除保護。")
+                                       : Self.protectedTrashText(item.name, kinds)))
                 continue
             }
             // The path may name a different file by now (deleted and recreated while the sheet was open).
             guard item.identity.stillAt(item.path) else {
-                failure = AppAlert(title: String(localized: "無法把「\(item.name)」丟到垃圾桶"),
-                                   message: String(localized: "它在確認期間被換成別的檔案或已經不在了，所以沒有動它。請重新選取後再試。"))
+                failures.append((item.name, String(localized: "它在確認期間被換成別的檔案或已經不在了，所以沒有動它。請重新選取後再試。")))
                 continue
             }
-            if let duplicate = request.duplicate {
+            if let duplicate = request.duplicates[item.id] {
                 guard duplicate.copy.unchanged() else {
-                    failure = AppAlert(title: String(localized: "無法把「\(item.name)」丟到垃圾桶"),
-                                       message: String(localized: "它在比對之後被修改過，可能已經不是重複檔，所以沒有動它。請重新找重複檔。"))
+                    failures.append((item.name, String(localized: "它在比對之後被修改過，可能已經不是重複檔，所以沒有動它。請重新找重複檔。")))
                     continue
                 }
                 guard duplicate.others.contains(where: { $0.unchanged() }) else {
-                    failure = AppAlert(title: String(localized: "無法把「\(item.name)」丟到垃圾桶"),
-                                       message: String(localized: "其他副本已經不在或被修改過，這可能是最後一份，所以沒有動它。"))
+                    failures.append((item.name, String(localized: "其他副本已經不在或被修改過，這可能是最後一份，所以沒有動它。")))
                     continue
                 }
             }
@@ -191,7 +255,7 @@ extension AppModel {
                     tree.removeSubtree(item.id)
                 }
             } catch {
-                failure = AppAlert(title: String(localized: "無法把「\(item.name)」丟到垃圾桶"), message: Self.reason(error))
+                failures.append((item.name, Self.reason(error)))
             }
         }
         if movedCount > 0 {
@@ -207,7 +271,12 @@ extension AppModel {
                 if self?.trashedBanner?.id == shown { self?.trashedBanner = nil }
             }
         }
-        if let failure { alert = failure }
+        if failures.count == 1, let failure = failures.first {
+            alert = AppAlert(title: String(localized: "無法把「\(failure.name)」丟到垃圾桶"), message: failure.reason)
+        } else if failures.count > 1 {
+            alert = AppAlert(title: String(localized: "有 \(failures.count) 個項目沒有丟到垃圾桶"),
+                             message: Self.batchDetails(failures))
+        }
         writeCleanupLog(logged, failureTitle: String(localized: "清理紀錄未寫入"), failureText: String(localized: "項目已移到垃圾桶，但無法保存清理紀錄"))
     }
 
@@ -326,6 +395,21 @@ struct TrashSheet: View {
                 }
             }
             Text("共 \(request.totalText)").fontWeight(.medium)
+            if !request.skipped.isEmpty {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("略過 \(request.skipped.count) 項，不會丟到垃圾桶：")
+                    ForEach(Array(request.skipped.prefix(3).enumerated()), id: \.offset) { _, skipped in
+                        Text("「\(skipped.name)」：\(skipped.reason)")
+                    }
+                    if request.skipped.count > 3 { Text("還有 \(request.skipped.count - 3) 項") }
+                }
+                .font(.callout).foregroundStyle(.secondary)
+            }
+            if request.reviewCount > 0 {
+                Label("其中 \(request.reviewCount) 項標示為「需要你判斷」，丟掉前請確認不再需要。",
+                      systemImage: "exclamationmark.triangle")
+                    .font(.callout)
+            }
             VStack(alignment: .leading, spacing: 6) {
                 bullet(items.count == 1 ? String(localized: "這個項目會移到垃圾桶。之後可以從垃圾桶放回原處，或在 Hoard 選「編輯 › 還原」。")
                        : String(localized: "這些項目會移到垃圾桶。之後可以從垃圾桶放回原處，或在 Hoard 選「編輯 › 還原」。"))

@@ -154,6 +154,10 @@ final class AppModel: ObservableObject {
     @Published var staleResult: StaleResult?
     @Published var stalePending = false
     @Published var cleanupReport: SuggestReport?
+    /// Items checked on the Cleanup page, per section, with the path each had when it was checked.
+    @Published var suggestionPicks: [NodeID: String] = [:]
+    @Published var duplicatePicks: [NodeID: String] = [:]
+    @Published var similarPicks: [NodeID: String] = [:]
     @Published var cleanupError: String?
     @Published var cleanupPending = false
     @Published var hiddenReport: HiddenSpace.Report?

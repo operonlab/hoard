@@ -24,6 +24,17 @@ final class FileTreeTests: XCTestCase {
         XCTAssertNil(t.lookup(path: "/other/a"))
     }
 
+    /// Every file on APFS has a clone ID, so the ID alone says nothing; sharing is a hardlink or a full clone.
+    func testSharesStorageIgnoresAPlainCloneID() {
+        let t = FileTree(rootPath: "/r", device: 1)
+        let plain = t.addChild(of: FileTree.root, entry: file("plain", 10, fileID: 1, clone: 41))
+        let linked = t.addChild(of: FileTree.root, entry: file("linked", 10, fileID: 2, links: 2, clone: 42))
+        let cloned = t.addChild(of: FileTree.root, entry: file("cloned", 10, fileID: 3, clone: 43, shared: true))
+        XCTAssertFalse(t[plain].sharesStorage)
+        XCTAssertTrue(t[linked].sharesStorage)
+        XCTAssertTrue(t[cloned].sharesStorage)
+    }
+
     func testHardlinksAndClonesCountOnceAndPromoteOnRemoval() {
         let t = FileTree(rootPath: "/r", device: 1)
         let a = t.addChild(of: FileTree.root, entry: dir("a"))

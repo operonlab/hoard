@@ -94,6 +94,9 @@ public struct Node: Sendable, Equatable {
 
     public var isDirectory: Bool { flags.contains(.directory) }
     public var isRemoved: Bool { flags.contains(.removed) }
+    /// Another name points at the same data: a hardlink, or a full APFS clone. Freeing this file then
+    /// frees less than its size.
+    public var sharesStorage: Bool { linkCount > 1 || flags.contains(.cloneShared) }
 
     init(name: String, parent: NodeID, firstChild: NodeID, nextSibling: NodeID, flags: NodeFlags, status: ScanStatus,
          rawAlloc: Int64, ownAlloc: Int64, logicalSize: Int64, modTime: Int64, fileID: UInt64, cloneID: UInt64,

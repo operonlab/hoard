@@ -5,6 +5,8 @@ import ScanCore
 /// Trailing inspector (§1.5): the selection, or the scope when nothing is selected.
 struct InspectorView: View {
     @ObservedObject var model: AppModel
+    @State private var diagnosis: UnreadableDiagnosis?
+    @State private var diagnosisKey = ""
 
     var body: some View {
         // The inspector runs under the toolbar. While the ScrollView took the toolbar as its top inset,
@@ -65,10 +67,15 @@ struct InspectorView: View {
                     .font(.title.weight(.semibold))
                     .monospacedDigit()
                     .accessibilityLabel(Fmt.sizeSpoken(node))
-                if node.status != .complete {
-                    Label(node.status == .partial ? String(localized: "部分內容沒有權限讀取") : String(localized: "沒有權限讀取這個資料夾"), systemImage: "lock.fill")
-                        .font(.callout)
-                        .foregroundStyle(.secondary)
+                if node.status == .unavailable {
+                    if diagnosisKey == "\(model.generation):\(id):\(path):\(node.status)", let diagnosis {
+                        UnreadableExplanation(model: model, diagnosis: diagnosis)
+                    } else {
+                        Text("正在確認讀不到的原因⋯").font(.callout).foregroundStyle(.secondary)
+                    }
+                } else if node.status == .partial {
+                    Text("裡面有讀不到的資料夾").font(.callout).foregroundStyle(.secondary)
+                    Button("看原因…") { model.unreadableSheetNode = id }
                 }
                 if id != FileTree.root, let ratio = Fmt.ratio(node, of: parent) {
                     HStack {
@@ -94,6 +101,16 @@ struct InspectorView: View {
             protectionSection(tree: tree, id: id)
             Divider()
             actions(tree: tree, id: id)
+        }
+        .task(id: "\(model.generation):\(id):\(path):\(node.status)") {
+            diagnosis = nil
+            diagnosisKey = "\(model.generation):\(id):\(path):\(node.status)"
+            guard node.status == .unavailable else { return }
+            let access = model.fullDiskAccess
+            let result = await Task.detached(priority: .userInitiated) {
+                Unreadable.diagnose([path], fullDiskAccess: access, timeout: 5)[0]
+            }.value
+            if !Task.isCancelled { diagnosis = result }
         }
     }
 

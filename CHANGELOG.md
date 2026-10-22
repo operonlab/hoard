@@ -5,6 +5,13 @@ and versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- **A list of the folders Hoard could not read.** The Unaccounted Space card's Unreadable folders
+  row and the inspector of a partly read folder open it: every unreadable folder, grouped by reason.
+  `hoard hidden --json` lists them too (`unreadable_folders`, `unreadable_total`,
+  `unreadable_by_reason`).
+
 ### Changed
 
 - **Cached scans take about a fifth of the space.** They are now compressed (LZFSE, in parallel
@@ -22,6 +29,13 @@ and versions follow [Semantic Versioning](https://semver.org/).
   that never finished. These are Hoard's own files; the
   history behind Recent Changes is never removed, nothing of yours is touched, and the CLI never
   removes caches. (`SnapshotCacheTests`)
+- **Every unreadable folder said "no permission".** The inspector showed the same line for a folder
+  only in iCloud, one macOS keeps from every app, one whose file permissions leave you out, and one
+  that failed with a read error, so the advice was often wrong. Hoard now checks the folder (without
+  downloading anything) and says which it is, with the fix when there is one: granting Full Disk
+  Access, rescanning a folder that can be read now, or where to look at the permissions. A check that
+  cannot finish within a few seconds, for example on a stalled network volume, says the reason is
+  unknown. (`UnreadableTests`)
 
 ## [0.6.1] - 2026-10-22
 

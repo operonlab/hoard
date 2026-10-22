@@ -969,6 +969,28 @@
         }
       }
     },
+    "%@（%lld）" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filter %@ (%lld)"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@（%lld）"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (%lld)"
+          }
+        }
+      }
+    },
     "%@（在「%@」的範圍內）" : {
       "localizations" : {
         "en" : {
@@ -2663,6 +2685,50 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Xcode 프로젝트 빌드 데이터입니다. 다시 빌드할 수 있습니다."
+          }
+        }
+      }
+    },
+    "macOS 保護" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Protected by macOS"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS による保護"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS 보호"
+          }
+        }
+      }
+    },
+    "macOS 擋住了這個資料夾；給 Hoard「完整磁碟取用權限」通常就能讀取。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS is blocking this folder. Giving Hoard Full Disk Access usually lets it read the folder."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS がこのフォルダへのアクセスをブロックしています。Hoard に「フルディスクアクセス」を許可すると、通常は読み取れるようになります。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS가 이 폴더를 막고 있습니다. Hoard에 전체 디스크 접근 권한을 허용하면 보통 읽을 수 있습니다."
           }
         }
       }
@@ -5029,6 +5095,28 @@
         }
       }
     },
+    "原因不明" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unknown Reason"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "理由不明"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "원인 불명"
+          }
+        }
+      }
+    },
     "原因（選填）" : {
       "localizations" : {
         "en" : {
@@ -5335,6 +5423,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "1MB 넘게 변경된 항목만 표시"
+          }
+        }
+      }
+    },
+    "只在 iCloud" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Only in iCloud"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud にのみ保存"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud에만 있음"
           }
         }
       }
@@ -9245,6 +9355,28 @@
         }
       }
     },
+    "檔案權限不允許" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blocked by File Permissions"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ファイルのアクセス権で制限"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "파일 권한으로 제한됨"
+          }
+        }
+      }
+    },
     "檔案系統回報 %@，去重後算 %@" : {
       "localizations" : {
         "en" : {
@@ -9401,6 +9533,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "보기"
+          }
+        }
+      }
+    },
+    "權限不足" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permission Denied"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アクセス権がありません"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "권한 부족"
           }
         }
       }
@@ -9639,6 +9793,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "‘%@’의 보호 상태 확인 중…"
+          }
+        }
+      }
+    },
+    "正在確認讀不到的原因⋯" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Checking why this folder cannot be read…"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "読み取れない理由を確認中…"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "읽을 수 없는 이유를 확인하는 중…"
           }
         }
       }
@@ -10157,6 +10333,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "이 폴더를 읽을 권한이 없습니다"
+          }
+        }
+      }
+    },
+    "沒有權限讀取這個資料夾。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No permission to read this folder."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このフォルダを読み取る権限がありません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 폴더를 읽을 권한이 없습니다."
           }
         }
       }
@@ -10701,6 +10899,28 @@
         }
       }
     },
+    "無法確認原因。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The reason could not be determined."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "理由を確認できません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이유를 확인할 수 없습니다."
+          }
+        }
+      }
+    },
     "無法確認這個 App 有沒有在執行，所以沒有移除。" : {
       "localizations" : {
         "en" : {
@@ -11181,6 +11401,50 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "지금"
+          }
+        }
+      }
+    },
+    "現在可以讀取" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Readable Now"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "現在は読み取り可能"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "지금 읽기 가능"
+          }
+        }
+      }
+    },
+    "現在讀得到了，重新掃描就能補上。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This folder is readable now. Rescan to include it."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "現在は読み取れます。再スキャンすると反映されます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "지금은 읽을 수 있습니다. 다시 스캔하면 포함됩니다."
           }
         }
       }
@@ -11745,6 +12009,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "보이지 않는 공간"
+          }
+        }
+      }
+    },
+    "看原因…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "See Why…"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "理由を見る…"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이유 보기…"
           }
         }
       }
@@ -12729,6 +13015,28 @@
         }
       }
     },
+    "裡面有讀不到的資料夾" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Some folders inside cannot be read."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "中に読み取れないフォルダがあります。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "내부에 읽을 수 없는 폴더가 있습니다."
+          }
+        }
+      }
+    },
     "要把 %lld 個項目丟到垃圾桶嗎？" : {
       "localizations" : {
         "en" : {
@@ -13225,6 +13533,28 @@
         }
       }
     },
+    "讀不到的資料夾" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unreadable Folders"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "読み取れないフォルダ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "읽을 수 없는 폴더"
+          }
+        }
+      }
+    },
     "讀不到這個項目的資訊。" : {
       "localizations" : {
         "en" : {
@@ -13243,6 +13573,50 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "이 항목의 정보를 읽을 수 없습니다."
+          }
+        }
+      }
+    },
+    "讀取時發生錯誤：%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Read error: %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "読み取りエラー：%@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "읽기 오류: %@"
+          }
+        }
+      }
+    },
+    "讀取錯誤" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Read Error"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "読み取りエラー"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "읽기 오류"
           }
         }
       }
@@ -13441,6 +13815,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "폴더"
+          }
+        }
+      }
+    },
+    "資料夾已不存在" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Folder No Longer Exists"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "フォルダは存在しません"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "폴더가 더 이상 없음"
           }
         }
       }
@@ -13819,6 +14215,28 @@
         }
       }
     },
+    "這個資料夾只在 iCloud，沒有下載到這台 Mac。Hoard 不會為了量大小而下載它。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This folder is only in iCloud, not downloaded to this Mac. Hoard will not download it to measure its size."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このフォルダは iCloud にのみあり、この Mac にはダウンロードされていません。Hoard はサイズを測るためにダウンロードしません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 폴더는 iCloud에만 있고 이 Mac에는 다운로드되지 않았습니다. Hoard는 크기를 측정하기 위해 다운로드하지 않습니다."
+          }
+        }
+      }
+    },
     "這個資料夾太大了：守護最多涵蓋 %@ 個項目。請改守護裡面較小的資料夾，或改用鎖定。" : {
       "localizations" : {
         "en" : {
@@ -13863,6 +14281,28 @@
         }
       }
     },
+    "這個資料夾已經不在了。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This folder no longer exists."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このフォルダはもう存在しません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 폴더는 더 이상 존재하지 않습니다."
+          }
+        }
+      }
+    },
     "這個資料夾已經不存在。" : {
       "localizations" : {
         "en" : {
@@ -13881,6 +14321,72 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "이 폴더는 더 이상 존재하지 않습니다."
+          }
+        }
+      }
+    },
+    "這個資料夾是你的，但它的權限設定連你也不能讀。可以在 Finder 的「取得資訊」›「共享與權限」查看。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This folder is yours, but its permissions don't let even you read it. You can check them in Finder: Get Info › Sharing & Permissions."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このフォルダはあなたのものですが、アクセス権の設定であなた自身も読み取れません。Finder の「情報を見る」›「共有とアクセス権」で確認できます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 폴더는 사용자 소유이지만 권한 설정 때문에 본인도 읽을 수 없습니다. Finder의 '정보 가져오기' › '공유 및 권한'에서 확인할 수 있습니다."
+          }
+        }
+      }
+    },
+    "這個資料夾的檔案權限不讓你讀。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This folder's file permissions don't let you read it."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このフォルダはファイルのアクセス権により読み取れません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 폴더는 파일 권한 때문에 읽을 수 없습니다."
+          }
+        }
+      }
+    },
+    "這個資料夾的檔案權限不讓你讀；擁有者是「%@」。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This folder's file permissions don't let you read it. Its owner is %@."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このフォルダはファイルのアクセス権により読み取れません。所有者は「%@」です。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 폴더는 파일 권한 때문에 읽을 수 없습니다. 소유자는 %@입니다."
           }
         }
       }
@@ -14013,6 +14519,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "이 항목은 %@을(를) 초과합니다. 가드는 편집 중인 파일에 적합합니다. 큰 완성 파일에는 잠금을 사용하십시오."
+          }
+        }
+      }
+    },
+    "這是 macOS 保護的資料夾，即使有完整磁碟取用權限也讀不到；它占的空間算在「看不到的空間」裡。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS protects this folder, so it cannot be read even with Full Disk Access. Its space is included in Unaccounted Space."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このフォルダは macOS によって保護されているため、フルディスクアクセスがあっても読み取れません。使用領域は「未計上の領域」に含まれます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS가 보호하는 폴더라 전체 디스크 접근 권한이 있어도 읽을 수 없습니다. 사용 공간은 미확인 공간에 포함됩니다."
           }
         }
       }
@@ -14289,6 +14817,28 @@
         }
       }
     },
+    "還有 %lld 個沒有列出。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld more not shown."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ほかに %lld 件は表示されていません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld개가 더 표시되지 않았습니다."
+          }
+        }
+      }
+    },
     "還有 %lld 個項目" : {
       "localizations" : {
         "en" : {
@@ -14407,28 +14957,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "아직 Hoard에서 휴지통으로 이동한 기록이 없습니다."
-          }
-        }
-      }
-    },
-    "部分內容沒有權限讀取" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No permission to read some contents"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "一部の内容を読み取る権限がありません"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "일부 내용을 읽을 권한이 없음"
           }
         }
       }
@@ -15051,6 +15579,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "시스템 설정에서 허용 필요"
+          }
+        }
+      }
+    },
+    "需要完整磁碟取用權限" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Full Disk Access Needed"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "フルディスクアクセスが必要"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "전체 디스크 접근 권한 필요"
           }
         }
       }

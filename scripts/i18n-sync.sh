@@ -20,7 +20,7 @@ log="$build/build.log"
 if ! swift build --build-path "$build" --product HoardApp -Xswiftc -emit-localized-strings \
     -Xswiftc -emit-localized-strings-path -Xswiftc "$out" "$@" >"$log" 2>&1; then
     tail -30 "$log" >&2
-    echo "HoardApp 建置失敗，沒有更新語言目錄（完整輸出：$log）" >&2
+    echo "HoardApp 建置失敗，沒有更新語言目錄（完整輸出：${log}）" >&2
     exit 1
 fi
 
@@ -30,7 +30,7 @@ args=()
 for source in Sources/HoardApp/*.swift; do
     list="$out/$(basename "$source" .swift).stringsdata"
     if [ ! -f "$list" ] || [ "$list" -ot "$source" ] || ! grep -qF "\"source\": \"$repo/$source\"" "$list"; then
-        echo "缺少、過期或不是這份原始碼的字串清單：$list（來源 $source）。刪掉 $build 再跑一次" >&2
+        echo "缺少、過期或不是這份原始碼的字串清單：${list}（來源 ${source}）。刪掉 ${build} 再跑一次" >&2
         exit 1
     fi
     args+=(--stringsdata "$list")

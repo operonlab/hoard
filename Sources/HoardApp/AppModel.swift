@@ -184,6 +184,7 @@ final class AppModel: ObservableObject {
     var spotlightQueue: [(NodeID, String)] = []
     var spotlightTask: Task<Void, Never>?
     // First run, access and errors (§2, §7)
+    @Published var unreadableSheetNode: NodeID?
     @Published var accessSheet: AccessSheetMode?
     @Published var accessBannerDismissed = false
     @Published var accessGained = false

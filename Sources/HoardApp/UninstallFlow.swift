@@ -27,13 +27,15 @@ private func moveAppWithFinder(_ path: String, identity: FileIdentity) throws ->
     }
     // An alias follows links: the script refuses unless it still names exactly this path (9001). The
     // timeout covers a person reading the password dialog; AppleScript's default is two minutes.
+    // Variable names must not be Finder terms ("target", "item", "file"…): inside the tell block
+    // Finder reads them as its own properties (-1728).
     let script = ["on run argv",
-                  "set target to (POSIX file (item 1 of argv) as alias)",
-                  "if POSIX path of target is not (item 2 of argv) then error \"changed\" number 9001",
+                  "set confirmedApp to (POSIX file (item 1 of argv) as alias)",
+                  "if POSIX path of confirmedApp is not (item 2 of argv) then error \"changed\" number 9001",
                   "with timeout of 3600 seconds",
-                  "tell application \"Finder\" to set moved to delete target",
+                  "tell application \"Finder\" to set movedApp to delete confirmedApp",
                   "end timeout",
-                  "return POSIX path of (moved as alias)",
+                  "return POSIX path of (movedApp as alias)",
                   "end run"]
     let process = Process()
     process.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")

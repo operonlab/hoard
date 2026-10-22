@@ -5123,6 +5123,28 @@
         }
       }
     },
+    "匯出為 CSV…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export as CSV…"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CSV として書き出す…"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CSV로 내보내기…"
+          }
+        }
+      }
+    },
     "原因不明" : {
       "localizations" : {
         "en" : {
@@ -10803,6 +10825,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "앱 사용 공간을 분석할 수 없습니다: %@"
+          }
+        }
+      }
+    },
+    "無法匯出" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Could Not Export"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "書き出せませんでした"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "내보낼 수 없음"
           }
         }
       }

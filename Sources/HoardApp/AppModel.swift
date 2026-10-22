@@ -205,6 +205,8 @@ final class AppModel: ObservableObject {
     @Published var changesPending = false
     @Published var changesNote: String?
     var changesDebounce: Task<Void, Never>?
+    @Published var largestFilter: FileCategory?
+    @Published var changesFilter: ChangesView.Filter = .all
     @Published private(set) var largestRows: [FileRow] = []
     @Published private(set) var largestPending = false
     @Published private(set) var scanning = false

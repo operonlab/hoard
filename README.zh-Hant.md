@@ -50,7 +50,7 @@ Hoard 沒有經過 Apple 公證（公證需要付費的開發者帳號），所�
 xattr -dr com.apple.quarantine /Applications/Hoard.app
 ```
 
-要掃整顆硬碟，請到**系統設定 › 隱私權與安全性 › 完整磁碟取用權限**加入 Hoard。發布版用的是 ad-hoc 簽章，所以每次更新後 macOS 都會要你重新授權一次。
+要掃整顆硬碟，請到**系統設定 › 隱私權與安全性 › 完整磁碟取用權限**加入 Hoard。發布版用的是 ad-hoc 簽章，所以每次更新後 macOS 都會要你重新授權一次。想知道有沒有新版，選「**Hoard › 檢查更新…**」。
 
 **命令列工具。** 用 Homebrew 安裝：
 

@@ -5,8 +5,16 @@ and versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.6.1] - 2026-10-22
+
 ### Added
 
+- **What's New.** After an update, Hoard shows once what changed in that version (Help › What's New
+  in Hoard opens it again). The notes ship inside the app; Hoard still makes no network connections.
+  The Help menu also links to the What Is System Data? page in the app's language.
+- **Check for Updates…** (Hoard menu) opens the Releases page; when the command-line tool came from
+  Homebrew it can run `brew upgrade operonlab/tap/hoard` in Terminal. Hoard itself still makes no
+  network connections.
 - **Cleanup moves many items to the Trash in one go.** Check suggestions one by one or with Select
   All in This Category, then confirm once; Move All to Trash does it for every listed suggestion.
   Items that cannot go (protected, system folders, inside a package) are left out instead of
@@ -55,5 +63,6 @@ and versions follow [Semantic Versioning](https://semver.org/).
 
 First public release.
 
-[Unreleased]: https://github.com/operonlab/hoard/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/operonlab/hoard/compare/v0.6.1...HEAD
+[0.6.1]: https://github.com/operonlab/hoard/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/operonlab/hoard/releases/tag/v0.6.0

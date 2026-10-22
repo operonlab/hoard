@@ -80,6 +80,23 @@ enum LaunchOptions {
                 if let app = model.appReport?.apps.first(where: { $0.name == name }) { model.requestUninstall(app) }
             }
         }
+        if args.contains("--whats-new") {
+            model.whatsNew = WhatsNew.releases.filter { $0.version == WhatsNew.currentVersion }
+        } else if !args.dropFirst().contains(where: { $0.hasPrefix("--") }) {
+            let defaults = UserDefaults.standard
+            let versions = WhatsNewPolicy.versionsToShow(
+                current: WhatsNew.currentVersion, lastSeen: defaults.string(forKey: WhatsNew.seenKey),
+                hasPriorUse: defaults.string(forKey: RootMemory.lastRootKey) != nil,
+                available: WhatsNew.releases.map(\.version))
+            if versions.isEmpty {
+                WhatsNew.recordSeen()
+            } else if model.trashRequest == nil && model.uninstallRequest == nil && model.accessSheet == nil &&
+                        model.protectRequest == nil && model.alert == nil {
+                model.whatsNew = versions.compactMap { version in
+                    WhatsNew.releases.first { $0.version == version }
+                }
+            }
+        }
     }
 
     /// Runs `action` once a tree is installed and the protection list has loaded (gives up after 30 s).
@@ -258,6 +275,29 @@ struct AppCommands: Commands {
     var body: some Commands {
         SidebarCommands()
         InspectorCommands()
+        CommandGroup(after: .appInfo) {
+            Button("檢查更新…") { model.updateCheckShown = true }
+        }
+        CommandGroup(replacing: .help) {
+            Button("Hoard 的新功能") {
+                model.whatsNew = WhatsNew.releases.filter { $0.version == WhatsNew.currentVersion }
+            }
+            Button("「系統資料」是什麼？") {
+                let language = Bundle.main.preferredLocalizations.first
+                let name: String
+                switch language {
+                case "zh-Hant": name = "system-data.zh-Hant.md"
+                case "ja": name = "system-data.ja.md"
+                case "ko": name = "system-data.ko.md"
+                default: name = "system-data.md"
+                }
+                NSWorkspace.shared.open(URL(string: "https://github.com/operonlab/hoard/blob/main/docs/\(name)")!)
+            }
+            Divider()
+            Button("在 GitHub 上查看 Hoard") {
+                NSWorkspace.shared.open(URL(string: "https://github.com/operonlab/hoard")!)
+            }
+        }
         CommandGroup(replacing: .newItem) {
             Button("選擇資料夾…") { FolderPicker.choose(model) }.keyboardShortcut("o")
             Button("掃描整個磁碟「\(Places.diskName)」") { model.choose(Places.disk) }

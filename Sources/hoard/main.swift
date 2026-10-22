@@ -1049,7 +1049,7 @@ private func mcpResponse(_ request: [String: Any], structured: inout Bool, clien
         structured = requested == "2025-06-18"
         client = mcpClientName(params["clientInfo"])
         return rpcResult(["protocolVersion": version, "capabilities": ["tools": [:]],
-                          "serverInfo": ["name": "hoard", "version": "0.6.1"]], id: id)
+                          "serverInfo": ["name": "hoard", "version": "0.6.2"]], id: id)
     case "ping": return rpcResult([:], id: id)
     case "tools/list": return rpcResult(["tools": mcpTools], id: id)
     case "tools/call":

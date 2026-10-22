@@ -5,6 +5,8 @@ and versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.6.2] - 2026-10-22
+
 ### Added
 
 - **Open in Hoard.** A service opens folders and disks in Hoard, and so does dropping a folder on
@@ -104,6 +106,7 @@ and versions follow [Semantic Versioning](https://semver.org/).
 
 First public release.
 
-[Unreleased]: https://github.com/operonlab/hoard/compare/v0.6.1...HEAD
+[Unreleased]: https://github.com/operonlab/hoard/compare/v0.6.2...HEAD
+[0.6.2]: https://github.com/operonlab/hoard/compare/v0.6.1...v0.6.2
 [0.6.1]: https://github.com/operonlab/hoard/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/operonlab/hoard/releases/tag/v0.6.0

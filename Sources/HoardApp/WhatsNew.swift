@@ -16,6 +16,10 @@ struct WhatsNewRelease: Identifiable {
 
 enum WhatsNew {
     static let releases: [WhatsNewRelease] = [
+        WhatsNewRelease(version: "0.6.3", items: [
+            WhatsNewItem(symbol: "trash", title: String(localized: "App Store 的 App 也能解除安裝"),
+                         body: String(localized: "這類 App 屬於系統管理員，以前按下確認後才會失敗。現在解除安裝單會先說明，確認後請 Finder 把它丟到垃圾桶（可能要允許 Hoard 控制 Finder，並輸入管理員密碼）；它的資料仍由 Hoard 處理。要放回，請在垃圾桶裡用「放回原處」。")),
+        ]),
         WhatsNewRelease(version: "0.6.2", items: [
             WhatsNewItem(symbol: "questionmark.folder", title: String(localized: "讀不到的資料夾會說原因"),
                          body: String(localized: "檢閱器和「看不到的空間」的新清單會逐個說明讀不到的原因：需要完整磁碟取用權限、macOS 保護、檔案權限、只在 iCloud、已不存在或讀取錯誤；有辦法解決的會附上按鈕。")),

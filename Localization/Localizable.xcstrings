@@ -1963,6 +1963,28 @@
         }
       }
     },
+    "App Store 的 App 也能解除安裝" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uninstall apps from the App Store"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App Store のアプリもアンインストール可能に"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App Store 앱도 제거할 수 있습니다"
+          }
+        }
+      }
+    },
     "App 佔用" : {
       "localizations" : {
         "en" : {
@@ -15259,6 +15281,28 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "這裡合併了 %1$lld 個較小的項目，共 %2$@。"
+          }
+        }
+      }
+    },
+    "這類 App 屬於系統管理員，以前按下確認後才會失敗。現在解除安裝單會先說明，確認後請 Finder 把它丟到垃圾桶（可能要允許 Hoard 控制 Finder，並輸入管理員密碼）；它的資料仍由 Hoard 處理。要放回，請在垃圾桶裡用「放回原處」。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "These apps belong to the administrator, so uninstalling one used to fail after you confirmed. The uninstall sheet now says so up front, and on confirmation Finder moves the app to the Trash (you may need to let Hoard control Finder and enter an administrator's password); Hoard still handles its data. To put the app back, use Put Back in the Trash."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "これらのアプリは管理者が所有しているため、以前は確認した後に失敗していました。現在はアンインストールの画面で先に説明し、確認すると Finder がアプリをゴミ箱に移動します（Hoard に Finder の操作を許可し、管理者のパスワードを入力する必要がある場合があります）。データは引き続き Hoard が処理します。元に戻すには、ゴミ箱で「戻す」を使ってください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이런 앱은 관리자 소유라서 예전에는 확인한 뒤에야 제거에 실패했습니다. 이제 제거 화면에서 미리 알려 주고, 확인하면 Finder가 앱을 휴지통으로 옮깁니다(Hoard가 Finder를 제어하도록 허용하고 관리자 암호를 입력해야 할 수 있습니다). 데이터는 계속 Hoard가 처리합니다. 앱을 되돌리려면 휴지통에서 '되돌려 놓기'를 사용하세요."
           }
         }
       }

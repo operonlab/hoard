@@ -41,13 +41,15 @@ final class SnapshotParallelReadTests: XCTestCase {
         return t
     }
 
-    private func write(_ tree: FileTree) throws -> URL {
+    private func write(_ tree: FileTree, uncompressed: Bool = false) throws -> URL {
         let dir = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
         addTeardownBlock { try? FileManager.default.removeItem(at: dir) }
         let url = dir.appendingPathComponent("big.dscan")
-        try Snapshot.write(tree, meta: SnapshotMeta(rootPath: tree.rootPath, device: tree.device, createdAt: Date(timeIntervalSinceReferenceDate: 0),
-                                                    scanSeconds: 0, lastEventId: 0, eventsUUID: nil), to: url)
+        let meta = SnapshotMeta(rootPath: tree.rootPath, device: tree.device, createdAt: Date(timeIntervalSinceReferenceDate: 0),
+                                scanSeconds: 0, lastEventId: 0, eventsUUID: nil)
+        if uncompressed { try Snapshot.writeUncompressed(tree, meta: meta, to: url) }
+        else { try Snapshot.write(tree, meta: meta, to: url) }
         return url
     }
 
@@ -117,7 +119,7 @@ final class SnapshotParallelReadTests: XCTestCase {
     }
 
     func testCorruptRecordInAnyChunkThrows() throws {
-        let url = try write(bigTree())
+        let url = try write(bigTree(), uncompressed: true)
         let good = [UInt8](try Data(contentsOf: url))
         let count = SnapshotParallelReadTests.fileCount + 301
         for index in [1, count / 2, count - 1] {
@@ -130,7 +132,7 @@ final class SnapshotParallelReadTests: XCTestCase {
     }
 
     func testInvalidUTF8InLateChunkThrows() throws {
-        let url = try write(bigTree())
+        let url = try write(bigTree(), uncompressed: true)
         let good = [UInt8](try Data(contentsOf: url))
         let count = SnapshotParallelReadTests.fileCount + 301
         func nameRange(_ index: Int, _ bytes: [UInt8]) -> Range<Int> {

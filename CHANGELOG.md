@@ -5,6 +5,24 @@ and versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- **Cached scans take about a fifth of the space.** They are now compressed (LZFSE, in parallel
+  chunks, each with a checksum): a whole-disk cache of 4.0 million items went from 560.6 MB to
+  115.3 MB, and reading it takes about 0.05 s longer (0.13 s before, 0.17–0.20 s after). Caches
+  written by 0.6.1 and earlier are still read; Hoard 0.6.1 and earlier scan again instead of reading
+  a new cache.
+
+### Fixed
+
+- **Cached scans were never removed.** On one Mac `~/Library/Caches/Hoard` reached 1.1 GB, including
+  caches for folders that no longer exist. Once per launch, after the first folder is opened, the app
+  now removes caches whose folder is gone (a folder on a disk that is not connected is not gone),
+  caches not used for 30 days, ones whose header it cannot read, and temporary files left by saves
+  that never finished. These are Hoard's own files; the
+  history behind Recent Changes is never removed, nothing of yours is touched, and the CLI never
+  removes caches. (`SnapshotCacheTests`)
+
 ## [0.6.1] - 2026-10-22
 
 ### Added

@@ -2403,6 +2403,34 @@
         }
       }
     },
+    "Hoard 只能解除安裝「應用程式」資料夾（/Applications 或 ~/Applications）裡的 App。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoard can only uninstall Apps in the Applications folders (/Applications or ~/Applications)."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoard がアンインストールできるのは「アプリケーション」フォルダ（/Applications または ~/Applications）内の App のみです。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoard는 응용 프로그램 폴더(/Applications 또는 ~/Applications)에 있는 App만 제거할 수 있습니다."
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hoard 只能解除安裝「應用程式」資料夾（/Applications 或 ~/Applications）裡的 App。"
+          }
+        }
+      }
+    },
     "Hoard 執行期間放回檔案、更新備份或遇到問題時，會列在這裡。" : {
       "localizations" : {
         "en" : {
@@ -10227,6 +10255,34 @@
         }
       }
     },
+    "沒有找到這個 App" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App not found"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "この App が見つかりません"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 App을 찾을 수 없음"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "沒有找到這個 App"
+          }
+        }
+      }
+    },
     "沒有本機資料（iCloud），無法確認。" : {
       "localizations" : {
         "en" : {
@@ -10697,6 +10753,34 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "비교 기준을 저장할 수 없습니다: %@"
+          }
+        }
+      }
+    },
+    "無法分析 App" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to analyze App"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App を解析できません"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App을 분석할 수 없음"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "無法分析 App"
           }
         }
       }

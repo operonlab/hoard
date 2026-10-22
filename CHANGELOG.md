@@ -7,6 +7,11 @@ and versions follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **Open in Hoard.** A service opens folders and disks in Hoard, and so does dropping a folder on
+  the Dock icon or `open -a Hoard <folder>`. Dropping an App on the window opens its uninstall plan;
+  nothing is removed until you confirm. Previously that drop scanned the App bundle as a folder.
+  (Apps are not taken from the Dock icon: macOS would first ask whether to open the App itself.)
+
 - **A list of the folders Hoard could not read.** The Unaccounted Space card's Unreadable folders
   row and the inspector of a partly read folder open it: every unreadable folder, grouped by reason.
   `hoard hidden --json` lists them too (`unreadable_folders`, `unreadable_total`,

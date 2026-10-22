@@ -7,6 +7,7 @@ import ScanCore
 struct HoardApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var delegate
     @StateObject private var model = AppModel()
+    @Environment(\.openWindow) private var openWindow
 
     init() {
         // A worktree build (scripts/make-app.sh gives it the .dev bundle id) keeps its caches, history
@@ -15,7 +16,7 @@ struct HoardApp: App {
     }
 
     var body: some Scene {
-        WindowGroup("Hoard") {
+        WindowGroup("Hoard", id: "main") {
             MainView(model: model)
                 .frame(minWidth: 960, minHeight: 620)
                 // Coming back from System Settings: pick up a permission granted meanwhile.
@@ -25,10 +26,19 @@ struct HoardApp: App {
                 }
                 .task {
                     delegate.model = model
-                    LaunchOptions.apply(to: model)
+                    delegate.openMainWindow = { openWindow(id: "main") }
+                    // Once per launch: a main window reopened later (only Settings was left) must not
+                    // run --scan again over what was opened meanwhile.
+                    if !delegate.launchOptionsApplied {
+                        delegate.launchOptionsApplied = true
+                        LaunchOptions.apply(to: model, hasPendingOpen: delegate.hasPendingOpen)
+                    }
+                    delegate.flushPendingOpen()
                 }
         }
         .defaultSize(width: 1280, height: 800)
+        // One window: an opened folder or App goes to AppDelegate.handle, never to a new window.
+        .handlesExternalEvents(matching: [])
         .commands { AppCommands(model: model) }
         Settings { SettingsView() }
     }
@@ -49,14 +59,14 @@ enum LaunchOptions {
         return args[index + 1]
     }
 
-    @MainActor static func apply(to model: AppModel) {
+    @MainActor static func apply(to model: AppModel, hasPendingOpen: Bool = false) {
         let args = CommandLine.arguments
         if let view = value("--view").flatMap(Int.init).flatMap(ViewKind.init(rawValue:)) { model.view = view }
         if args.contains("--largest") { model.view = .largest }
         if args.contains("--list") { model.mapMode = .list }
         if let path = value("--scan") {
             model.open(path, scope: value("--scope"), select: value("--select"))
-        } else if !args.contains("--fresh"), let last = UserDefaults.standard.string(forKey: RootMemory.lastRootKey),
+        } else if !hasPendingOpen, !args.contains("--fresh"), let last = UserDefaults.standard.string(forKey: RootMemory.lastRootKey),
                   FileManager.default.fileExists(atPath: last) {
             // Second launch onwards: reopen the last location from its cache (§2.1).
             model.open(last)
@@ -91,7 +101,9 @@ enum LaunchOptions {
             if versions.isEmpty {
                 WhatsNew.recordSeen()
             } else if model.trashRequest == nil && model.uninstallRequest == nil && model.accessSheet == nil &&
-                        model.protectRequest == nil && model.alert == nil {
+                        model.protectRequest == nil && model.alert == nil && !hasPendingOpen {
+                // A launch to open something (an App's uninstall plan) shows it instead; the notes wait
+                // for the next launch, since nothing was recorded as seen.
                 model.whatsNew = versions.compactMap { version in
                     WhatsNew.releases.first { $0.version == version }
                 }
@@ -111,7 +123,45 @@ enum LaunchOptions {
 }
 
 @MainActor final class AppDelegate: NSObject, NSApplicationDelegate {
+    var openMainWindow: (() -> Void)?
+    var launchOptionsApplied = false
+    private var pendingOpen: [URL]?
+    var hasPendingOpen: Bool { pendingOpen != nil }
+
+    /// Services, the Dock icon and `open -a` arrive here, possibly before the window has handed over the
+    /// model (then the URLs wait for it) or while only Settings is open.
+    @discardableResult func handle(_ urls: [URL]) -> Bool {
+        guard OpenRequest.first(of: urls) != .ignored else { return false }
+        NSApp.activate(ignoringOtherApps: true)
+        if let main = NSApp.windows.first(where: { !($0 is NSPanel) && $0.canBecomeMain
+                                                   && $0.identifier?.rawValue.contains("Settings") != true }) {
+            if main.isMiniaturized { main.deminiaturize(nil) }
+            main.makeKeyAndOrderFront(nil)
+        } else {
+            openMainWindow?()
+        }
+        guard let model else { pendingOpen = urls; return true }
+        return model.handleOpen(urls)
+    }
+
+    func flushPendingOpen() {
+        guard let urls = pendingOpen else { return }
+        pendingOpen = nil
+        handle(urls)
+    }
+
+    func application(_ sender: NSApplication, open urls: [URL]) { handle(urls) }
+
+    @objc func openFolder(_ pboard: NSPasteboard, userData: String?,
+                          error: AutoreleasingUnsafeMutablePointer<NSString?>) {
+        let urls = (pboard.readObjects(forClasses: [NSURL.self],
+                                       options: [.urlReadingFileURLsOnly: true]) as? [URL]) ?? []
+        handle(urls)
+    }
+
     func applicationDidFinishLaunching(_ notification: Notification) {
+        NSApp.servicesProvider = self
+        NSUpdateDynamicServices()
         switch LaunchOptions.value("--appearance") {
         case "dark": NSApp.appearance = NSAppearance(named: .darkAqua)
         case "light": NSApp.appearance = NSAppearance(named: .aqua)

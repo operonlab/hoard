@@ -9,7 +9,83 @@ struct UninstallRequest: Identifiable {
     let plan: UninstallPlan
 }
 
+@MainActor private var pendingUninstallPath: (model: ObjectIdentifier, path: String, generation: Int)?
+
 extension AppModel {
+    /// A folder opens; an App opens its uninstall plan. Everything else is refused.
+    @discardableResult func handleOpen(_ urls: [URL]) -> Bool {
+        switch OpenRequest.first(of: urls) {
+        case .folder(let path): choose(path); return true
+        case .app(let path): requestUninstall(atPath: path); return true
+        case .ignored: return false
+        }
+    }
+
+    func requestUninstall(atPath path: String) {
+        let canonical = OpenRequest.normalized(path)
+        guard OpenRequest.isInAppFolders(canonical, roots: AppFootprintRoots.user().applications) else {
+            alertAppNotFound()
+            return
+        }
+        let token = generation
+        pendingUninstallPath = (ObjectIdentifier(self), canonical, token)
+        if tree == nil {
+            // No App view to show progress on, so appPending stays as it is.
+            Task { [weak self] in
+                let outcome = await Task.detached(priority: .userInitiated) { () -> AppFootprintOutcome in
+                    do { return .success(try AppFootprintAnalyzer.analyze(tree: nil)) }
+                    catch { return .failure(error.localizedDescription) }
+                }.value
+                guard let self, pendingUninstallPath?.model == ObjectIdentifier(self),
+                      pendingUninstallPath?.path == canonical else { return }
+                guard self.generation == token else { pendingUninstallPath = nil; return }
+                self.landUninstallReport(outcome)
+            }
+        } else {
+            view = .apps
+            if let report = appReport, !appPending {
+                finishPendingUninstall(in: report)
+            } else {
+                updateAppFootprint()
+            }
+        }
+    }
+
+    func landUninstallReport(_ outcome: AppFootprintOutcome) {
+        switch outcome {
+        case .success(let report):
+            appReport = report
+            appError = nil
+            appPending = false
+            finishPendingUninstall(in: report)
+        case .failure(let error):
+            appReport = nil
+            appError = error
+            appPending = false
+            if let pending = pendingUninstallPath, pending.model == ObjectIdentifier(self),
+               pending.generation == generation {
+                pendingUninstallPath = nil
+                alert = AppAlert(title: String(localized: "無法分析 App"), message: error)
+            }
+        }
+    }
+
+    private func finishPendingUninstall(in report: AppFootprintReport) {
+        guard let pending = pendingUninstallPath,
+              pending.model == ObjectIdentifier(self), pending.generation == generation else { return }
+        pendingUninstallPath = nil
+        if let app = OpenRequest.app(at: pending.path, in: report.apps) {
+            requestUninstall(app)
+        } else {
+            alertAppNotFound()
+        }
+    }
+
+    private func alertAppNotFound() {
+        alert = AppAlert(title: String(localized: "沒有找到這個 App"),
+                         message: String(localized: "Hoard 只能解除安裝「應用程式」資料夾（/Applications 或 ~/Applications）裡的 App。"))
+    }
+
     func requestUninstall(_ app: AppFootprint) {
         guard let report = appReport else { return }
         Task { [weak self] in

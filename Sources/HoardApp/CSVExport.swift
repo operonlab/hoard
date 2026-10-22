@@ -38,7 +38,8 @@ extension AppModel {
     }
 
     var canExportCSV: Bool {
-        guard tree != nil, searchText.isEmpty else { return false }
+        // Same test as the content area: a search of only spaces still shows the view.
+        guard tree != nil, searchText.trimmingCharacters(in: .whitespaces).isEmpty else { return false }
         switch view {
         case .map: return true
         case .largest: return !largestPending
@@ -106,9 +107,10 @@ extension AppModel {
                 return [.text(row.name), .text(row.id), .text(kind),
                         row.kind == .added ? .empty : .integer(row.before),
                         row.kind == .removed ? .empty : .integer(row.after),
-                        row.uncertain ? .empty : .integer(row.delta), .bool(row.uncertain)]
+                        // Uncertain: a side was not fully readable, so both sizes are lower bounds.
+                        row.uncertain ? .empty : .integer(row.delta), .text(row.uncertain ? "at_least" : "exact")]
             }
-            return CSVTable(header: ["name", "path", "change", "before_bytes", "after_bytes", "delta_bytes", "uncertain"], rows: rows)
+            return CSVTable(header: ["name", "path", "change", "before_bytes", "after_bytes", "delta_bytes", "size_status"], rows: rows)
         case .apps:
             let rows = visibleApps.map { app -> [CSVValue] in
                 let size = csvSize(app.appSize.bytes, app.appSize.status)

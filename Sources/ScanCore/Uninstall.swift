@@ -30,13 +30,27 @@ public struct UninstallPlan: Codable, Sendable, Equatable {
     public var name: String
     public var bundleID: String?
     public var refusal: String?
+    public var appNeedsAdmin: Bool
     public var items: [UninstallItem]
     public var kept: [UninstallKept]
 
     public init(appPath: String, name: String, bundleID: String?, refusal: String? = nil,
-                items: [UninstallItem] = [], kept: [UninstallKept] = []) {
+                items: [UninstallItem] = [], kept: [UninstallKept] = [], appNeedsAdmin: Bool = false) {
         self.appPath = appPath; self.name = name; self.bundleID = bundleID
-        self.refusal = refusal; self.items = items; self.kept = kept
+        self.refusal = refusal; self.items = items; self.kept = kept; self.appNeedsAdmin = appNeedsAdmin
+    }
+
+    private enum CodingKeys: String, CodingKey { case appPath, name, bundleID, refusal, items, kept, appNeedsAdmin }
+
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(appPath: try values.decode(String.self, forKey: .appPath),
+                  name: try values.decode(String.self, forKey: .name),
+                  bundleID: try values.decodeIfPresent(String.self, forKey: .bundleID),
+                  refusal: try values.decodeIfPresent(String.self, forKey: .refusal),
+                  items: try values.decode([UninstallItem].self, forKey: .items),
+                  kept: try values.decode([UninstallKept].self, forKey: .kept),
+                  appNeedsAdmin: try values.decodeIfPresent(Bool.self, forKey: .appNeedsAdmin) ?? false)
     }
 
     public func total(selected: Set<String>) -> SizeReading {
@@ -52,6 +66,9 @@ public struct UninstallPlan: Codable, Sendable, Equatable {
 }
 
 public enum UninstallPlanner {
+    public static func userCanMove(_ path: String) -> Bool {
+        access(path, W_OK) == 0 && access((path as NSString).deletingLastPathComponent, W_OK) == 0
+    }
     private static let removableApple: Set<String> = [
         "com.apple.dt.Xcode", "com.apple.iWork.Pages", "com.apple.iWork.Numbers", "com.apple.iWork.Keynote",
         "com.apple.garageband10", "com.apple.iMovieApp", "com.apple.FinalCut", "com.apple.logic10",
@@ -144,6 +161,7 @@ public enum UninstallPlanner {
             return refuse("無法安全確認 App 本體的位置，請重新分析。")
         }
         result.items.append(bundle)
+        result.appNeedsAdmin = !userCanMove(app.appPath)
         let other = otherInstalls.sorted().first
         for location in app.locations {
             let path = location.path

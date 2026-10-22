@@ -67,6 +67,16 @@ for language in zh-Hant en ja ko; do
         echo "無法寫入 $language.lproj/ServicesMenu.strings" >&2
         exit 1
     fi
+    case "$language" in
+        zh-Hant) automation_reason='Hoard 會請 Finder 把屬於系統管理員的 App 丟到垃圾桶。' ;;
+        en) automation_reason='Hoard asks Finder to move apps that belong to the administrator to the Trash.' ;;
+        ja) automation_reason='Hoard は Finder に管理者が所有するアプリをゴミ箱へ移動するよう依頼します。' ;;
+        ko) automation_reason='Hoard는 Finder에 관리자 소유 앱을 휴지통으로 옮기도록 요청합니다.' ;;
+    esac
+    if ! printf '"NSAppleEventsUsageDescription" = "%s";\n' "$automation_reason" > "$resources/$language.lproj/InfoPlist.strings"; then
+        echo "無法寫入 $language.lproj/InfoPlist.strings" >&2
+        exit 1
+    fi
 done
 cp "$repo/Resources/Brand/Hoard.icns" "$resources/Hoard.icns" || { echo '無法複製 App 圖示' >&2; exit 1; }
 # Background guardian (Settings › App 關閉時也守護). The app registers it with SMAppService only
@@ -102,6 +112,7 @@ if ! cat > "$app/Contents/Info.plist" <<PLIST
 <key>CFBundleVersion</key><string>8</string>
 <key>LSMinimumSystemVersion</key><string>14.0</string>
 <key>NSPrincipalClass</key><string>NSApplication</string>
+<key>NSAppleEventsUsageDescription</key><string>Hoard asks Finder to move apps that belong to the administrator to the Trash.</string>
 <key>NSServices</key><array><dict>
 <key>NSMessage</key><string>openFolder</string>
 <key>NSPortName</key><string>${bundle_name}</string>

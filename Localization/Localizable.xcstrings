@@ -2007,6 +2007,28 @@
         }
       }
     },
+    "App 在確認之後換了位置或內容，沒有移除任何東西。請重新分析。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The app moved or changed after you confirmed, so nothing was removed. Analyze again."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "確認後にアプリの場所または内容が変わったため、何も削除していません。もう一度分析してください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "확인한 뒤 앱의 위치나 내용이 바뀌어 아무것도 제거하지 않았습니다. 다시 분석하세요."
+          }
+        }
+      }
+    },
     "App 大小" : {
       "localizations" : {
         "en" : {
@@ -2293,6 +2315,72 @@
         }
       }
     },
+    "Finder 一小時內沒有完成，Hoard 沒有移除任何東西。若之後完成，App 會出現在垃圾桶。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finder did not finish within an hour, and Hoard removed nothing. If Finder finishes later, the app will be in the Trash."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finder が 1 時間以内に完了しなかったため、Hoard は何も削除していません。後で完了した場合、アプリはゴミ箱に入ります。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finder가 1시간 안에 끝나지 않아 Hoard는 아무것도 제거하지 않았습니다. 나중에 끝나면 앱이 휴지통에 들어갑니다."
+          }
+        }
+      }
+    },
+    "Finder 沒有確認移走的是這個 App。請到垃圾桶檢查。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finder did not confirm that it moved this app. Check the Trash."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finder は、移動したのがこのアプリであることを確認できませんでした。ゴミ箱を確認してください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finder가 이 앱을 옮겼는지 확인하지 못했습니다. 휴지통을 확인하세요."
+          }
+        }
+      }
+    },
+    "Finder 還在處理上一個解除安裝，請等它完成。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finder is still handling the previous uninstall. Wait for it to finish."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finder が前のアンインストールをまだ処理しています。完了するまでお待ちください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finder가 아직 이전 제거를 처리하고 있습니다. 끝날 때까지 기다리세요."
+          }
+        }
+      }
+    },
     "Gradle 專案快取，可重新建立。" : {
       "localizations" : {
         "en" : {
@@ -2493,6 +2581,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hoard가 이번 스캔을 기억합니다. 다음에 열면 크기 변화와 추가되거나 제거된 항목이 여기에 표시됩니다."
+          }
+        }
+      }
+    },
+    "Hoard 沒有控制 Finder 的權限。可以在 系統設定 › 隱私權與安全性 › 自動化 允許，或在 Finder 裡自己把它丟到垃圾桶。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoard is not allowed to control Finder. Allow it in System Settings › Privacy & Security › Automation, or move the app to the Trash yourself in Finder."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoard には Finder を操作する権限がありません。システム設定 › プライバシーとセキュリティ › オートメーションで許可するか、Finder でご自身でゴミ箱に移動してください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoard에 Finder 제어 권한이 없습니다. 시스템 설정 › 개인정보 보호 및 보안 › 자동화에서 허용하거나 Finder에서 직접 휴지통으로 옮기세요."
           }
         }
       }
@@ -2965,6 +3075,50 @@
         }
       }
     },
+    "「%@」屬於系統管理員（例如從 App Store 安裝）。按下後會請 Finder 把它丟到垃圾桶，macOS 可能先問是否允許 Hoard 控制 Finder，再要求管理員密碼。它的資料仍由 Hoard 丟到垃圾桶。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“%@” belongs to the administrator (for example, it was installed from the App Store). Finder will be asked to move it to the Trash. macOS may first ask you to allow Hoard to control Finder, then ask for an administrator password. Hoard will still move its data to the Trash."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "「%@」は管理者が所有しています（App Store からインストールされた場合など）。Finder にゴミ箱への移動を依頼します。macOS から Hoard による Finder の操作許可と、管理者パスワードを求められることがあります。関連データは引き続き Hoard がゴミ箱に移動します。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“%@”은 관리자가 소유한 앱입니다(예: App Store에서 설치). Finder에 휴지통으로 옮기도록 요청합니다. macOS가 먼저 Hoard의 Finder 제어를 허용할지 묻고 관리자 암호를 요청할 수 있습니다. 관련 데이터는 계속 Hoard가 휴지통으로 옮깁니다."
+          }
+        }
+      }
+    },
+    "「%@」已不在原處，可能已在垃圾桶；它的資料沒有移除。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“%@” is no longer where it was and may be in the Trash. Its data was not removed."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "「%@」は元の場所にありません。ゴミ箱にある可能性があります。データは削除していません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“%@”이(가) 원래 위치에 없으며 휴지통에 있을 수 있습니다. 데이터는 제거하지 않았습니다."
+          }
+        }
+      }
+    },
     "「%@」是系統需要的資料夾，Hoard 不會把它丟到垃圾桶。" : {
       "localizations" : {
         "en" : {
@@ -3005,6 +3159,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "‘%@’이(가) 실행 중입니다. 먼저 종료하십시오."
+          }
+        }
+      }
+    },
+    "「%@」由 Finder 丟到垃圾桶。要放回，請在垃圾桶裡用「放回原處」。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finder moved “%@” to the Trash. To restore it, use Put Back in the Trash."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finder が「%@」をゴミ箱に移動しました。元に戻すには、ゴミ箱で「戻す」を使ってください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finder가 “%@”을(를) 휴지통으로 옮겼습니다. 복원하려면 휴지통에서 ‘되돌려 놓기’를 사용하세요."
           }
         }
       }
@@ -3959,6 +4135,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "사용자"
+          }
+        }
+      }
+    },
+    "你取消了，沒有移除任何東西。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You cancelled. Nothing was removed."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "キャンセルしました。何も削除されていません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "취소했습니다. 아무것도 제거되지 않았습니다."
           }
         }
       }
@@ -6893,6 +7091,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "다운로드한 패키지 캐시입니다. 필요할 때 다시 다운로드할 수 있습니다."
+          }
+        }
+      }
+    },
+    "已丟到垃圾桶" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Moved to Trash"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ゴミ箱に移動しました"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "휴지통으로 이동함"
           }
         }
       }
@@ -14405,6 +14625,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "이 항목은 폴더가 아닙니다."
+          }
+        }
+      }
+    },
+    "這些項目會移到垃圾桶。App 本體要在垃圾桶裡用「放回原處」放回；它的資料也可以在 Hoard 選「編輯 › 還原」。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "These items go to the Trash. Put the app back with Put Back in the Trash; its data can also be restored in Hoard with Edit › Undo."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "これらの項目はゴミ箱に移動します。アプリ本体はゴミ箱の「戻す」で元に戻します。データは Hoard の「編集 › 取り消す」でも戻せます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 항목들은 휴지통으로 이동합니다. 앱은 휴지통에서 '되돌려 놓기'로 복원하고, 데이터는 Hoard의 '편집 › 실행 취소'로도 복원할 수 있습니다."
           }
         }
       }

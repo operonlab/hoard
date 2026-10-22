@@ -5,6 +5,14 @@ and versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Uninstalling an administrator-owned app, including App Store apps and apps placed by an installer,
+  failed only after confirmation with “you don't have permission” and removed nothing. The sheet now
+  warns beforehand. On confirmation, Finder moves the app to the Trash (macOS may ask to allow Hoard
+  to control Finder and for an administrator password); Hoard still moves its data. Use Finder's Put
+  Back to restore the app. (`UninstallTests`)
+
 ## [0.6.2] - 2026-10-22
 
 ### Added

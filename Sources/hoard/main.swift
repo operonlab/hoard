@@ -234,7 +234,7 @@ private func runInsights(_ a: Args, capture: ResultCapture?) throws -> Bool {
         let defaults = Set(plan.items.filter(\.selectedByDefault).map(\.path))
         let out: [String: Any] = ["schema": schema, "command": "uninstall-plan", "app_path": plan.appPath,
             "name": plan.name, "bundle_id": plan.bundleID.map { $0 as Any } ?? NSNull(),
-            "refusal": plan.refusal.map { $0 as Any } ?? NSNull(),
+            "refusal": plan.refusal.map { $0 as Any } ?? NSNull(), "app_needs_admin": plan.appNeedsAdmin,
             "items": plan.items.map { item in
                 ["path": item.path, "role": item.role, "kind": item.kind.map { $0.rawValue as Any } ?? NSNull(),
                  "size": sizeObject(item.size), "why": item.why, "selected_by_default": item.selectedByDefault] as [String: Any]
@@ -835,7 +835,7 @@ private func boundedInsight(_ args: Args) throws -> [String: Any] {
         case "doctor": return DoctorCommand.timeoutFields()
         case "uninstall-plan":
             return ["schema": schema, "command": "uninstall-plan", "app_path": NSNull(), "name": NSNull(),
-                    "bundle_id": NSNull(), "refusal": "分析逾時，沒有移動任何檔案。", "items": [], "kept": [],
+                    "bundle_id": NSNull(), "refusal": "分析逾時，沒有移動任何檔案。", "app_needs_admin": false, "items": [], "kept": [],
                     "total_default": sizeObject(.init(bytes: nil, status: .unavailable))]
         default:
             return ["schema": schema, "command": "apps", "status": "cancelled", "apps": [],

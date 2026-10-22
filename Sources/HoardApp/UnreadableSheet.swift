@@ -8,8 +8,8 @@ struct UnreadableExplanation: View {
 
     static func message(_ diagnosis: UnreadableDiagnosis) -> String {
         switch diagnosis.reason {
-        case .needsFullDiskAccess: return String(localized: "macOS 需要你同意，Hoard 才能讀這個資料夾。")
-        case .systemProtected: return String(localized: "這是 macOS 保護的資料夾，任何 App 都讀不到；它占的空間算在「看不到的空間」裡。")
+        case .needsFullDiskAccess: return String(localized: "macOS 擋住了這個資料夾；給 Hoard「完整磁碟取用權限」通常就能讀取。")
+        case .systemProtected: return String(localized: "這是 macOS 保護的資料夾，即使有完整磁碟取用權限也讀不到；它占的空間算在「看不到的空間」裡。")
         case .permission: return String(localized: "沒有權限讀取這個資料夾。")
         case .filePermissions:
             guard let owner = diagnosis.owner else { return String(localized: "這個資料夾的檔案權限不讓你讀。") }
@@ -77,14 +77,21 @@ struct UnreadableSheet: View {
         }
         .padding(20)
         .frame(minWidth: 560, idealWidth: 640, minHeight: 360, idealHeight: 540)
-        .task(id: node) {
+        // A rescan or another folder starts a new generation, possibly with the same node id.
+        .task(id: "\(node):\(model.generation)") {
+            results = nil
             guard let tree = model.tree else { results = []; return }
-            let list = Unreadable.folders(in: tree, under: node, limit: 300)
-            total = list.total
+            let nodes = tree.nodes, rootPath = tree.rootPath, device = tree.device
             let access = model.fullDiskAccess
-            results = await Task.detached(priority: .userInitiated) {
-                list.paths.map { (path: $0, diagnosis: Unreadable.diagnose($0, fullDiskAccess: access)) }
+            let found = await Task.detached(priority: .userInitiated) { () -> (rows: [(path: String, diagnosis: UnreadableDiagnosis)], total: Int) in
+                let snapshot = FileTree(restoring: nodes, rootPath: rootPath, device: device)
+                let list = Unreadable.folders(in: snapshot, under: node, limit: 300)
+                let diagnoses = Unreadable.diagnose(list.paths, fullDiskAccess: access, timeout: 10)
+                return (Array(zip(list.paths, diagnoses).map { (path: $0, diagnosis: $1) }), list.total)
             }.value
+            guard !Task.isCancelled else { return }
+            total = found.total
+            results = found.rows
         }
     }
 

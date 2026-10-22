@@ -335,7 +335,8 @@ An `unknown` line always has `bytes: null`. `unreadable_folders` lists up to 100
 folders from the scan, each with `path`, `reason`, `errno` (number or `null`), and
 `owner` (short user name or `null`). Reasons are `needs_full_disk_access`,
 `system_protected`, `permission`, `file_permissions`, `not_downloaded`, `gone`,
-`readable_now`, `error`, and `unknown`. `unreadable_total` counts all matching
+`readable_now`, `error`, and `unknown`; checking stops after 3 seconds and the folders
+not checked by then are `unknown`. `unreadable_total` counts all matching
 folders, including those not listed; `unreadable_by_reason` counts the listed
 entries. Without a tree these are `[]`, `null`, and `{}` respectively. When the scan does not finish in
 time (`source: "scan_cancelled"`), the volume lines are still measured and the

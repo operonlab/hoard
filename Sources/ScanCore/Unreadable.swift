@@ -21,7 +21,7 @@ public enum Unreadable {
         }
         if let error = lstatErrno { return result(error == ENOENT || error == ENOTDIR ? .gone : .error, error) }
         if flags & UInt32(SF_DATALESS) != 0 { return result(.notDownloaded) }
-        if flags & UInt32(SF_RESTRICTED) != 0 { return result(.systemProtected) }
+        // SF_RESTRICTED (SIP) forbids changes, not reading, so only the open below can tell.
         if opened { return result(.readableNow) }
         guard let error = openErrno else { return result(.unknown) }
         switch error {
@@ -44,7 +44,7 @@ public enum Unreadable {
         if let statError { return classify(lstatErrno: statError, flags: 0, opened: false, openErrno: nil,
                                            fullDiskAccess: fullDiskAccess, owner: nil) }
         let flags = UInt32(info.st_flags)
-        if flags & UInt32(SF_DATALESS | SF_RESTRICTED) != 0 {
+        if flags & UInt32(SF_DATALESS) != 0 {
             return classify(lstatErrno: nil, flags: flags, opened: false, openErrno: nil,
                             fullDiskAccess: fullDiskAccess, owner: nil)
         }
@@ -76,6 +76,25 @@ public enum Unreadable {
         }
     }
 
+    /// Diagnoses `paths` in order on a thread of their own, for at most `timeout` seconds: an `open` on
+    /// a stalled network volume can block for good, so whatever is not done by then is `unknown`.
+    public static func diagnose(_ paths: [String], fullDiskAccess: FullDiskAccess.State,
+                                timeout: TimeInterval) -> [UnreadableDiagnosis] {
+        diagnose(paths, timeout: timeout) { diagnose($0, fullDiskAccess: fullDiskAccess) }
+    }
+
+    static func diagnose(_ paths: [String], timeout: TimeInterval,
+                         using diagnoseOne: @escaping @Sendable (String) -> UnreadableDiagnosis) -> [UnreadableDiagnosis] {
+        let results = DiagnosisResults(count: paths.count)
+        let finished = DispatchSemaphore(value: 0)
+        Thread.detachNewThread {
+            for (index, path) in paths.enumerated() { results.set(index, diagnoseOne(path)) }
+            finished.signal()
+        }
+        _ = finished.wait(timeout: .now() + max(0, timeout))
+        return results.snapshot()
+    }
+
     public static func folders(in tree: FileTree, under node: NodeID, limit: Int) -> (paths: [String], total: Int) {
         guard node >= 0, Int(node) < tree.nodeCount, !tree[node].isRemoved else { return ([], 0) }
         var pending = [node]
@@ -89,5 +108,16 @@ public enum Unreadable {
         }
         paths.sort()
         return (Array(paths.prefix(max(0, limit))), paths.count)
+    }
+}
+
+private final class DiagnosisResults: @unchecked Sendable {
+    private let lock = NSLock()
+    private var items: [UnreadableDiagnosis?]
+    init(count: Int) { items = Array(repeating: nil, count: count) }
+    func set(_ index: Int, _ value: UnreadableDiagnosis) { lock.lock(); items[index] = value; lock.unlock() }
+    func snapshot() -> [UnreadableDiagnosis] {
+        lock.lock(); defer { lock.unlock() }
+        return items.map { $0 ?? UnreadableDiagnosis(reason: .unknown, errno: nil, owner: nil) }
     }
 }

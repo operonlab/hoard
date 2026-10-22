@@ -9,7 +9,8 @@ final class UnreadableTests: XCTestCase {
             (ENOENT, UInt32(SF_DATALESS), true, nil, .denied, .gone),
             (EIO, 0, false, nil, .denied, .error),
             (nil, UInt32(SF_DATALESS | SF_RESTRICTED), true, EPERM, .denied, .notDownloaded),
-            (nil, UInt32(SF_RESTRICTED), true, nil, .denied, .systemProtected),
+            (nil, UInt32(SF_RESTRICTED), true, nil, .denied, .readableNow),
+            (nil, UInt32(SF_RESTRICTED), false, EPERM, .denied, .needsFullDiskAccess),
             (nil, 0, true, EACCES, .denied, .readableNow),
             (nil, 0, false, EACCES, .denied, .filePermissions),
             (nil, 0, false, EPERM, .denied, .needsFullDiskAccess),
@@ -23,7 +24,7 @@ final class UnreadableTests: XCTestCase {
             let actual = Unreadable.classify(lstatErrno: statError, flags: flags, opened: opened,
                                              openErrno: openError, fullDiskAccess: access, owner: "tester")
             XCTAssertEqual(actual.reason, expected)
-            XCTAssertEqual(actual.errno, statError ?? (opened || flags != 0 ? nil : openError))
+            XCTAssertEqual(actual.errno, statError ?? (opened || flags & UInt32(SF_DATALESS) != 0 ? nil : openError))
             XCTAssertEqual(actual.owner, expected == .filePermissions ? "tester" : nil)
         }
     }
@@ -42,6 +43,19 @@ final class UnreadableTests: XCTestCase {
         let diagnosis = Unreadable.diagnose(locked.path, fullDiskAccess: .denied)
         XCTAssertEqual(diagnosis.reason, .filePermissions)
         XCTAssertEqual(diagnosis.owner, String(cString: getpwuid(getuid())!.pointee.pw_name))
+        XCTAssertEqual(Unreadable.diagnose([root.appendingPathComponent("missing").path, root.path, locked.path],
+                                           fullDiskAccess: .denied, timeout: 10).map(\.reason),
+                       [.gone, .readableNow, .filePermissions])
+    }
+
+    func testBatchGivesUpAtTimeout() {
+        let start = Date()
+        let results = Unreadable.diagnose(["fast", "stuck", "after"], timeout: 0.3) { path in
+            if path != "fast" { Thread.sleep(forTimeInterval: 2) }
+            return UnreadableDiagnosis(reason: .readableNow, errno: nil, owner: nil)
+        }
+        XCTAssertLessThan(Date().timeIntervalSince(start), 1.5)
+        XCTAssertEqual(results.map(\.reason), [.readableNow, .unknown, .unknown])
     }
 
     func testFoldersLimitTotalAndRemoved() {

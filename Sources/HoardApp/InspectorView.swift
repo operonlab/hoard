@@ -68,7 +68,7 @@ struct InspectorView: View {
                     .monospacedDigit()
                     .accessibilityLabel(Fmt.sizeSpoken(node))
                 if node.status == .unavailable {
-                    if diagnosisKey == "\(id):\(path):\(node.status)", let diagnosis {
+                    if diagnosisKey == "\(model.generation):\(id):\(path):\(node.status)", let diagnosis {
                         UnreadableExplanation(model: model, diagnosis: diagnosis)
                     } else {
                         Text("正在確認讀不到的原因⋯").font(.callout).foregroundStyle(.secondary)
@@ -102,13 +102,13 @@ struct InspectorView: View {
             Divider()
             actions(tree: tree, id: id)
         }
-        .task(id: "\(id):\(path):\(node.status)") {
+        .task(id: "\(model.generation):\(id):\(path):\(node.status)") {
             diagnosis = nil
-            diagnosisKey = "\(id):\(path):\(node.status)"
+            diagnosisKey = "\(model.generation):\(id):\(path):\(node.status)"
             guard node.status == .unavailable else { return }
             let access = model.fullDiskAccess
             let result = await Task.detached(priority: .userInitiated) {
-                Unreadable.diagnose(path, fullDiskAccess: access)
+                Unreadable.diagnose([path], fullDiskAccess: access, timeout: 5)[0]
             }.value
             if !Task.isCancelled { diagnosis = result }
         }

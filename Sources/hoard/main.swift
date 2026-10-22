@@ -297,9 +297,8 @@ private func runInsights(_ a: Args, capture: ResultCapture?) throws -> Bool {
         }
         let unreadable = tree.map { Unreadable.folders(in: $0, under: FileTree.root, limit: 100) }
         let access = FullDiskAccess.current()
-        let diagnosed = (unreadable?.paths ?? []).map { path -> (String, UnreadableDiagnosis) in
-            (path, Unreadable.diagnose(path, fullDiskAccess: access))
-        }
+        let unreadablePaths = unreadable?.paths ?? []
+        let diagnosed = Array(zip(unreadablePaths, Unreadable.diagnose(unreadablePaths, fullDiskAccess: access, timeout: 3)))
         var byReason: [String: Int] = [:]
         let unreadableRows: [[String: Any]] = diagnosed.map { path, diagnosis in
             byReason[diagnosis.reason.rawValue, default: 0] += 1

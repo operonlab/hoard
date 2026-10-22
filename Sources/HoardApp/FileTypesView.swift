@@ -10,7 +10,7 @@ struct FileTypesView: View {
     @Environment(\.colorSchemeContrast) private var contrast
 
     var body: some View {
-        let groups = self.groups
+        let groups = model.visibleTypeGroups
         let total = max(1, model.tree.map { $0[model.scope].totalAlloc } ?? 1)
         let status = model.tree.map { $0[model.scope].status } ?? .complete
         VStack(spacing: 0) {
@@ -29,7 +29,7 @@ struct FileTypesView: View {
         }
     }
 
-    @ViewBuilder private func content(_ groups: [Group], total: Int64, lowerBound: Bool) -> some View {
+    @ViewBuilder private func content(_ groups: [AppModel.TypeGroup], total: Int64, lowerBound: Bool) -> some View {
         ViewHeader(title: String(localized: "檔案類型"), sentence: sentence(groups), busy: model.statsPending) { EmptyView() }
         Divider()
         header
@@ -63,23 +63,6 @@ struct FileTypesView: View {
             .disabled(picked == nil)
         }
         .padding(10)
-    }
-
-    private struct Group {
-        let category: FileCategory
-        let bytes: Int64
-        let count: Int64
-        let stats: [ExtensionStat]
-    }
-
-    private var groups: [Group] {
-        var byCategory: [FileCategory: [ExtensionStat]] = [:]
-        for stat in model.stats { byCategory[FileCategory.of(extension: stat.ext), default: []].append(stat) }
-        return byCategory.map { category, stats in
-            Group(category: category, bytes: stats.reduce(0) { $0 + $1.bytes }, count: stats.reduce(0) { $0 + $1.count },
-                  stats: stats.sorted { $0.bytes > $1.bytes })
-        }
-        .sorted { $0.bytes != $1.bytes ? $0.bytes > $1.bytes : $0.category.rawValue < $1.category.rawValue }
     }
 
     private var header: some View {
@@ -130,7 +113,7 @@ struct FileTypesView: View {
         .accessibilityElement(children: .combine)
     }
 
-    private func sentence(_ groups: [Group]) -> String {
+    private func sentence(_ groups: [AppModel.TypeGroup]) -> String {
         guard let tree = model.tree else { return "" }
         let scopeNode = tree[model.scope]
         let partial = scopeNode.status == .partial
@@ -147,5 +130,25 @@ struct FileTypesView: View {
             return String(localized: "\(model.scopeName) 裡最多的是「\(top.category.title)」，\(size)（\(Fmt.percent(ratio))）。比例以讀得到的部分計算。\n\(unreadable)")
         }
         return String(localized: "\(model.scopeName) 裡最多的是「\(top.category.title)」，\(size)（\(Fmt.percent(ratio))）。")
+    }
+}
+
+extension AppModel {
+    struct TypeGroup {
+        let category: FileCategory
+        let bytes: Int64
+        let count: Int64
+        let stats: [ExtensionStat]
+    }
+
+    var visibleTypeGroups: [TypeGroup] {
+        if let tree, tree[scope].status == .unavailable { return [] }
+        var byCategory: [FileCategory: [ExtensionStat]] = [:]
+        for stat in stats { byCategory[FileCategory.of(extension: stat.ext), default: []].append(stat) }
+        return byCategory.map { category, stats in
+            TypeGroup(category: category, bytes: stats.reduce(0) { $0 + $1.bytes },
+                      count: stats.reduce(0) { $0 + $1.count }, stats: stats.sorted { $0.bytes > $1.bytes })
+        }
+        .sorted { $0.bytes != $1.bytes ? $0.bytes > $1.bytes : $0.category.rawValue < $1.category.rawValue }
     }
 }

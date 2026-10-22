@@ -5,14 +5,6 @@ import ScanCore
 struct AppFootprintView: View {
     @ObservedObject var model: AppModel
 
-    private var apps: [AppFootprint] {
-        (model.appReport?.apps ?? []).sorted {
-            if $0.isApple != $1.isApple { return !$0.isApple }
-            let left = ($0.appSize.bytes ?? 0) + ($0.data.bytes ?? 0)
-            let right = ($1.appSize.bytes ?? 0) + ($1.data.bytes ?? 0)
-            return left != right ? left > right : $0.name.localizedStandardCompare($1.name) == .orderedAscending
-        }
-    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -25,7 +17,7 @@ struct AppFootprintView: View {
                     .foregroundStyle(.orange).padding(.horizontal, 14).padding(.bottom, 8)
             }
             Divider()
-            if apps.isEmpty, !model.appPending {
+            if model.visibleApps.isEmpty, !model.appPending {
                 ContentUnavailableView("沒有找到 App", systemImage: "app.badge", description: Text("目前找不到可分析的 App。"))
             } else {
                 List {
@@ -38,7 +30,7 @@ struct AppFootprintView: View {
                     }
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(.secondary)
-                    ForEach(apps, id: \.appPath) { app in
+                    ForEach(model.visibleApps, id: \.appPath) { app in
                         DisclosureGroup {
                             if app.locations.isEmpty {
                                 Text("沒有找到可對應的使用者資料位置。")
@@ -116,4 +108,16 @@ private extension AppDataKind {
         case .cookies: String(localized: "Cookie")
         }
     }
+}
+
+extension AppModel {
+    var visibleApps: [AppFootprint] {
+        (appReport?.apps ?? []).sorted {
+            if $0.isApple != $1.isApple { return !$0.isApple }
+            let left = ($0.appSize.bytes ?? 0) + ($0.data.bytes ?? 0)
+            let right = ($1.appSize.bytes ?? 0) + ($1.data.bytes ?? 0)
+            return left != right ? left > right : $0.name.localizedStandardCompare($1.name) == .orderedAscending
+        }
+    }
+
 }

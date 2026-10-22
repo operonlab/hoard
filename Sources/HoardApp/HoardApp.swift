@@ -303,6 +303,10 @@ struct AppCommands: Commands {
             Button("掃描整個磁碟「\(Places.diskName)」") { model.choose(Places.disk) }
             Button("掃描家目錄「\(Places.userName)」") { model.choose(Places.home) }
             Divider()
+            Button("匯出為 CSV…") { model.exportCSV() }
+                .keyboardShortcut("e", modifiers: [.command, .shift])
+                .disabled(!model.canExportCSV)
+            Divider()
             Button("重新掃描") { model.rescan() }
                 .keyboardShortcut("r")
                 .disabled(model.rootPath == nil || model.scanning)

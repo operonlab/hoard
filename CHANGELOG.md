@@ -7,6 +7,10 @@ and versions follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **File › Export as CSV (⌘⇧E)** saves the list on screen: the folder's items, largest or
+  long-unused files, file types, recent changes, or apps. Sizes are in bytes with a status
+  column, so an unknown size is an empty cell, never 0.
+
 - **A list of the folders Hoard could not read.** The Unaccounted Space card's Unreadable folders
   row and the inspector of a partly read folder open it: every unreadable folder, grouped by reason.
   `hoard hidden --json` lists them too (`unreadable_folders`, `unreadable_total`,

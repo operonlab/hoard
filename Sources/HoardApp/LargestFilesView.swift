@@ -4,13 +4,12 @@ import ScanCore
 /// 最大的檔案 (§4.1): the 1,000 largest counted files in the scope, from `TreeQuery.largestFiles`.
 struct LargestFilesView: View {
     @ObservedObject var model: AppModel
-    @State private var filter: FileCategory?
 
     var body: some View {
-        let rows = filter.map { wanted in model.largestRows.filter { $0.category == wanted } } ?? model.largestRows
+        let rows = model.visibleLargestRows
         VStack(spacing: 0) {
             ViewHeader(title: String(localized: "最大的檔案"), sentence: sentence(rows), busy: model.largestPending) {
-                Picker("類型：", selection: $filter) {
+                Picker("類型：", selection: $model.largestFilter) {
                     Text("全部").tag(FileCategory?.none)
                     Divider()
                     ForEach(FileCategory.allCases) { category in
@@ -21,7 +20,7 @@ struct LargestFilesView: View {
             }
             Divider()
             if rows.isEmpty && !model.largestPending {
-                ContentUnavailableView(filter.map { String(localized: "沒有「\($0.title)」檔案") } ?? String(localized: "沒有檔案"),
+                ContentUnavailableView(model.largestFilter.map { String(localized: "沒有「\($0.title)」檔案") } ?? String(localized: "沒有檔案"),
                                        systemImage: "doc",
                                        description: Text("「\(model.scopeName)」裡沒有符合的檔案。"))
             } else {
@@ -34,7 +33,7 @@ struct LargestFilesView: View {
     private func sentence(_ rows: [FileRow]) -> String {
         if model.largestPending && rows.isEmpty { return String(localized: "正在找出「\(model.scopeName)」裡最大的檔案⋯") }
         let total = rows.reduce(Int64(0)) { $0 + $1.bytes }
-        if let filter {
+        if let filter = model.largestFilter {
             return String(localized: "\(model.scopeName) 裡前 \(rows.count) 個最大的「\(filter.title)」檔案，共 \(Fmt.bytes(total))。")
         }
         return String(localized: "\(model.scopeName) 裡前 \(rows.count) 個最大的檔案，共 \(Fmt.bytes(total))。")
@@ -84,5 +83,11 @@ struct SearchResultsView: View {
             return String(localized: "找到 \(result.count) 個項目，共 \(Fmt.bytes(result.bytes))。列出最大的 \(result.rows.count) 個。")
         }
         return String(localized: "找到 \(result.count) 個項目，共 \(Fmt.bytes(result.bytes))。")
+    }
+}
+
+extension AppModel {
+    var visibleLargestRows: [FileRow] {
+        largestFilter.map { wanted in largestRows.filter { $0.category == wanted } } ?? largestRows
     }
 }

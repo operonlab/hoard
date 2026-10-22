@@ -7,6 +7,11 @@ and versions follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **Open in Hoard.** A service opens folders and disks in Hoard, and so does dropping a folder on
+  the Dock icon or `open -a Hoard <folder>`. Dropping an App on the window opens its uninstall plan;
+  nothing is removed until you confirm. Previously that drop scanned the App bundle as a folder.
+  (Apps are not taken from the Dock icon: macOS would first ask whether to open the App itself.)
+
 - **File › Export as CSV (⌘⇧E)** saves the list on screen: the folder's items, largest or
   long-unused files, file types, recent changes, or apps. Sizes are in bytes with a status
   column, so an unknown size is an empty cell, never 0.

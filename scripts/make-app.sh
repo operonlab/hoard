@@ -57,6 +57,16 @@ if ! mkdir -p "$resources" || ! xcrun xcstringstool compile "$repo/Localization/
 fi
 for language in zh-Hant en ja ko; do
     mkdir -p "$resources/$language.lproj" || { echo "無法建立 $language.lproj" >&2; exit 1; }
+    case "$language" in
+        zh-Hant) service_name="用 ${bundle_name} 打開" ;;
+        en) service_name="Open in ${bundle_name}" ;;
+        ja) service_name="${bundle_name} で開く" ;;
+        ko) service_name="${bundle_name}에서 열기" ;;
+    esac
+    if ! printf '"Open in %s" = "%s";\n' "$bundle_name" "$service_name" > "$resources/$language.lproj/ServicesMenu.strings"; then
+        echo "無法寫入 $language.lproj/ServicesMenu.strings" >&2
+        exit 1
+    fi
 done
 cp "$repo/Resources/Brand/Hoard.icns" "$resources/Hoard.icns" || { echo '無法複製 App 圖示' >&2; exit 1; }
 # Background guardian (Settings › App 關閉時也守護). The app registers it with SMAppService only
@@ -92,6 +102,18 @@ if ! cat > "$app/Contents/Info.plist" <<PLIST
 <key>CFBundleVersion</key><string>7</string>
 <key>LSMinimumSystemVersion</key><string>14.0</string>
 <key>NSPrincipalClass</key><string>NSApplication</string>
+<key>NSServices</key><array><dict>
+<key>NSMessage</key><string>openFolder</string>
+<key>NSPortName</key><string>${bundle_name}</string>
+<key>NSMenuItem</key><dict><key>default</key><string>Open in ${bundle_name}</string></dict>
+<key>NSSendFileTypes</key><array><string>public.folder</string><string>public.volume</string></array>
+<key>NSRequiredContext</key><dict/>
+</dict></array>
+<key>CFBundleDocumentTypes</key><array>
+<dict><key>CFBundleTypeName</key><string>Folder</string>
+<key>CFBundleTypeRole</key><string>Viewer</string><key>LSHandlerRank</key><string>None</string>
+<key>LSItemContentTypes</key><array><string>public.folder</string><string>public.volume</string></array></dict>
+</array>
 </dict></plist>
 PLIST
 then
@@ -148,6 +170,10 @@ else
 fi
 if ! codesign --verify --deep --strict "$app"; then
     echo 'Hoard.app 簽章驗證失敗' >&2
+    exit 1
+fi
+if ! plutil -lint "$app/Contents/Info.plist"; then
+    echo 'Info.plist 格式不正確' >&2
     exit 1
 fi
 echo "已建立 ${app}（${bundle_id}）"

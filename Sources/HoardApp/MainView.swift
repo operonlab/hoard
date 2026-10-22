@@ -25,11 +25,7 @@ struct MainView: View {
                 .inspectorColumnWidth(min: 240, ideal: 280, max: 360)
         }
         .dropDestination(for: URL.self) { urls, _ in
-            guard let folder = urls.first(where: { (try? $0.resourceValues(forKeys: [.isDirectoryKey]).isDirectory) == true }) else {
-                return false
-            }
-            model.choose(folder.path)
-            return true
+            model.handleOpen(urls)
         }
         .sheet(item: $model.trashRequest) { request in TrashSheet(model: model, request: request) }
         .sheet(item: $model.uninstallRequest) { request in UninstallSheet(model: model, request: request) }

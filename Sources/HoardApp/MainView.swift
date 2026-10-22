@@ -35,6 +35,9 @@ struct MainView: View {
         .sheet(item: $model.uninstallRequest) { request in UninstallSheet(model: model, request: request) }
         .sheet(item: $model.accessSheet) { mode in AccessSheet(model: model, mode: mode) }
         .sheet(item: $model.protectRequest) { request in ProtectSheet(model: model, request: request) }
+        .sheet(isPresented: Binding(get: { model.whatsNew != nil }, set: { if !$0 { model.closeWhatsNew() } })) {
+            WhatsNewSheet(releases: model.whatsNew ?? [], model: model)
+        }
         .alert(model.alert?.title ?? "", isPresented: Binding(get: { model.alert != nil }, set: { if !$0 { model.alert = nil } })) {
             Button("好") { model.alert = nil }
         } message: { Text(model.alert?.message ?? "") }

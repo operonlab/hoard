@@ -193,6 +193,7 @@ final class AppModel: ObservableObject {
     var lastProgressAt = Date.distantPast
     // Trash (§8)
     @Published var trashRequest: TrashRequest?
+    @Published var whatsNew: [WhatsNewRelease]?
     @Published var uninstallRequest: UninstallRequest?
     @Published var trashedBanner: TrashedBatch?
     @Published var alert: AppAlert?
@@ -297,6 +298,13 @@ final class AppModel: ObservableObject {
     @Published private(set) var fullDiskAccess: FullDiskAccess.State = FullDiskAccess.current()
     /// Folders marked unavailable in the current tree (system-protected ones stay here even with FDA).
     @Published private(set) var unreadableCount = 0
+
+    func closeWhatsNew() {
+        whatsNew = nil
+        if !CommandLine.arguments.contains("--whats-new") {
+            UserDefaults.standard.set(WhatsNew.currentVersion, forKey: WhatsNew.seenKey)
+        }
+    }
 
     /// Re-probes the permission (on activation). When it has just been granted, retries only the
     /// folders that could not be read, instead of rescanning everything.

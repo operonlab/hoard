@@ -7,6 +7,9 @@ and versions follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **What's New.** After an update, Hoard shows once what changed in that version (Help › What's New
+  in Hoard opens it again). The notes ship inside the app; Hoard still makes no network connections.
+  The Help menu also links to the What Is System Data? page in the app's language.
 - **Cleanup moves many items to the Trash in one go.** Check suggestions one by one or with Select
   All in This Category, then confirm once; Move All to Trash does it for every listed suggestion.
   Items that cannot go (protected, system folders, inside a package) are left out instead of

@@ -283,6 +283,28 @@
         }
       }
     },
+    "%@ 的新功能" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What’s New in %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ の新機能"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@의 새로운 기능"
+          }
+        }
+      }
+    },
     "%@ 至少 %@。" : {
       "localizations" : {
         "en" : {
@@ -2117,6 +2139,28 @@
         }
       }
     },
+    "App 要到版本頁下載新的 Hoard 壓縮檔，換掉「應用程式」裡的 Hoard.app。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To update the app, download the new Hoard archive from the Releases page and replace Hoard.app in Applications."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アプリの更新は、リリースページから新しい Hoard の圧縮ファイルをダウンロードし、「アプリケーション」内の Hoard.app を置き換えてください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "앱을 업데이트하려면 릴리스 페이지에서 새 Hoard 압축 파일을 다운로드하고 ‘응용 프로그램’의 Hoard.app을 교체하세요."
+          }
+        }
+      }
+    },
     "App 關閉時也守護（登入後在背景執行）" : {
       "localizations" : {
         "en" : {
@@ -2293,6 +2337,50 @@
         }
       }
     },
+    "Hoard %@ 的新功能" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What’s New in Hoard %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoard %@ の新機能"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoard %@의 새로운 기능"
+          }
+        }
+      }
+    },
+    "Hoard 不會自己連網，所以不會自動檢查。打開版本頁，看看有沒有比目前更新的版本。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoard does not connect to the internet, so it cannot check automatically. Open the Releases page to see whether a newer version is available."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoard はインターネットに接続しないため、自動確認はしません。リリースページを開いて、新しいバージョンがあるか確認してください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoard는 인터넷에 연결하지 않으므로 자동으로 확인하지 않습니다. 릴리스 페이지를 열어 더 새로운 버전이 있는지 확인하세요."
+          }
+        }
+      }
+    },
     "Hoard 執行期間放回檔案、更新備份或遇到問題時，會列在這裡。" : {
       "localizations" : {
         "en" : {
@@ -2377,6 +2465,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hoard가 이 작업을 완료할 수 없습니다(%@)."
+          }
+        }
+      }
+    },
+    "Hoard 的新功能" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What’s New in Hoard"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoard の新機能"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoard의 새로운 기능"
           }
         }
       }
@@ -2949,6 +3059,116 @@
         }
       }
     },
+    "「Hoard › 檢查更新…」會打開版本頁；命令列工具若是用 Homebrew 裝的，可以一鍵在終端機更新。Hoard 本身照樣不連網。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoard › Check for Updates… opens the Releases page. If the command-line tool was installed with Homebrew, you can update it in Terminal with one click. Hoard itself still does not connect to the internet."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "「Hoard › アップデートを確認…」でリリースページを開けます。コマンドラインツールを Homebrew でインストールした場合は、ターミナルでワンクリックで更新できます。Hoard 自体は引き続きインターネットに接続しません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "‘Hoard › 업데이트 확인…’에서 릴리스 페이지를 열 수 있습니다. 명령줄 도구를 Homebrew로 설치했다면 터미널에서 클릭 한 번으로 업데이트할 수 있습니다. Hoard 자체는 여전히 인터넷에 연결하지 않습니다."
+          }
+        }
+      }
+    },
+    "「可以清掉的」裡的建議、重複檔和相似的照片都能勾選，建議還能整類全選，或按「全部丟到垃圾桶…」。丟之前一樣先列出來讓你確認，受保護的會略過，⌘Z 可以整批放回。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select suggestions in Cleanup, Duplicate Files, and Similar Photos. Select all suggestions in a category, or use Move All to Trash. Hoard lists items for confirmation first, skips protected items, and lets you restore the whole batch with ⌘Z."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "クリーンアップの提案、重複ファイル、類似した写真を選択できます。提案はカテゴリごとの全選択や「すべてゴミ箱に入れる…」にも対応。移動前に一覧を確認でき、保護された項目は除外されます。⌘Z でまとめて元に戻せます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "정리의 제안, 중복 파일, 비슷한 사진을 선택할 수 있습니다. 제안은 범주별 전체 선택 또는 ‘모두 휴지통으로 이동…’도 가능합니다. 이동 전 목록을 확인하고 보호된 항목은 건너뛰며, ⌘Z로 한꺼번에 복원할 수 있습니다."
+          }
+        }
+      }
+    },
+    "「最近變動」的變大、變小不再重複計算；確認單不再把每個檔案都說成和其他檔案共用空間；一次丟很多項時，每個沒丟成的都會列出來。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recent Changes no longer counts growth and shrinkage twice. The confirmation no longer says every file shares space with others. When moving many items to the Trash, every failed item is listed."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "「最近の変更」の増加・減少量が重複計算されなくなりました。確認画面ですべてのファイルが他のファイルと容量を共有していると誤表示されなくなりました。複数項目をゴミ箱に入れる際は、失敗した項目をすべて表示します。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최근 변경 사항의 증가 및 감소량을 중복 계산하지 않습니다. 확인 화면에서 모든 파일이 다른 파일과 공간을 공유한다고 잘못 표시하지 않습니다. 여러 항목을 휴지통으로 옮길 때 실패한 항목을 모두 표시합니다."
+          }
+        }
+      }
+    },
+    "「系統資料」是什麼" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What Is System Data?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "「システムデータ」とは"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "‘시스템 데이터’란?"
+          }
+        }
+      }
+    },
+    "「系統資料」是什麼？" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What Is System Data?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "「システムデータ」とは？"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "‘시스템 데이터’란?"
+          }
+        }
+      }
+    },
     "「資源庫」（~/Library）本身不能保護，裡面的項目也不能鎖定，因為 App 需要能取代自己的檔案。裡面的項目可以改用守護。" : {
       "localizations" : {
         "en" : {
@@ -3029,6 +3249,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "· 유형 혼합"
+          }
+        }
+      }
+    },
+    "一次清掉很多項" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clean Up Many Items at Once"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "複数の項目をまとめてクリーンアップ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "여러 항목 한 번에 정리"
           }
         }
       }
@@ -4021,6 +4263,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "수정일"
+          }
+        }
+      }
+    },
+    "修正" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fixes"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "修正"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "수정 사항"
           }
         }
       }
@@ -5493,6 +5757,50 @@
         }
       }
     },
+    "命令列工具可以用 Homebrew 安裝：" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You can install the command-line tool with Homebrew:"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "コマンドラインツールは Homebrew でインストールできます："
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "명령줄 도구는 Homebrew로 설치할 수 있습니다:"
+          }
+        }
+      }
+    },
+    "命令列工具是用 Homebrew 安裝的。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The command-line tool was installed with Homebrew."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "コマンドラインツールは Homebrew でインストールされています。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "명령줄 도구가 Homebrew로 설치되어 있습니다."
+          }
+        }
+      }
+    },
     "和 %@ 的掃描相比（%@）" : {
       "localizations" : {
         "en" : {
@@ -5609,6 +5917,28 @@
         }
       }
     },
+    "在 GitHub 上查看 Hoard" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View Hoard on GitHub"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GitHub で Hoard を見る"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GitHub에서 Hoard 보기"
+          }
+        }
+      }
+    },
     "在空間地圖中標示" : {
       "localizations" : {
         "en" : {
@@ -5627,6 +5957,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "공간 지도에서 강조 표시"
+          }
+        }
+      }
+    },
+    "在終端機更新命令列工具" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update Command-Line Tool in Terminal"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ターミナルでコマンドラインツールを更新"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "터미널에서 명령줄 도구 업데이트"
           }
         }
       }
@@ -6049,6 +6401,28 @@
         }
       }
     },
+    "完成" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完了"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "완료"
+          }
+        }
+      }
+    },
     "完整內容" : {
       "localizations" : {
         "en" : {
@@ -6067,6 +6441,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "전체 내용"
+          }
+        }
+      }
+    },
+    "完整更新紀錄" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Full Changelog"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新履歴をすべて見る"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "전체 변경 기록"
           }
         }
       }
@@ -7305,6 +7701,28 @@
         }
       }
     },
+    "打開「終端機」執行 brew upgrade operonlab/tap/hoard" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Terminal and run brew upgrade operonlab/tap/hoard"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ターミナルを開いて brew upgrade operonlab/tap/hoard を実行"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "터미널을 열어 brew upgrade operonlab/tap/hoard 실행"
+          }
+        }
+      }
+    },
     "打開垃圾桶" : {
       "localizations" : {
         "en" : {
@@ -7323,6 +7741,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "휴지통 열기"
+          }
+        }
+      }
+    },
+    "打開版本頁" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Releases Page"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "リリースページを開く"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "릴리스 페이지 열기"
           }
         }
       }
@@ -8069,6 +8509,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "추가됨"
+          }
+        }
+      }
+    },
+    "新的說明頁逐項解釋「看不到的空間」每一行，以及為什麼和系統設定的數字不一樣。從「說明」選單打開。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A new page explains every line of Unaccounted Space and why its numbers differ from Storage settings. Open it from the Help menu."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新しい説明ページで「見えない領域」の各行と、ストレージ設定の数値と異なる理由を解説します。「ヘルプ」メニューから開けます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "새 도움말 페이지에서 보이지 않는 공간의 각 항목과 저장 공간 설정의 수치가 다른 이유를 설명합니다. 도움말 메뉴에서 열 수 있습니다."
           }
         }
       }
@@ -8877,6 +9339,50 @@
         }
       }
     },
+    "檢查更新" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check for Updates"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アップデートを確認"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "업데이트 확인"
+          }
+        }
+      }
+    },
+    "檢查更新…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check for Updates…"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アップデートを確認…"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "업데이트 확인…"
+          }
+        }
+      }
+    },
     "檢視" : {
       "localizations" : {
         "en" : {
@@ -9321,6 +9827,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "그룹마다 하나만 남기기…"
+          }
+        }
+      }
+    },
+    "每組按「只留一份」，或按「每組只留一份…」一次處理全部，一組永遠至少留一份。最小檔案多了 1 MB 和 10 MB，小一點的重複檔也找得到。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use Keep One for a group, or Keep One of Each… for all groups. Every group always keeps at least one copy. New 1 MB and 10 MB minimum file sizes help find smaller duplicates."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "グループごとに「1つだけ残す」、または「各グループで1つだけ残す…」で一括処理できます。どのグループにも必ず1つは残ります。最小ファイルサイズに 1 MB と 10 MB が加わり、小さな重複ファイルも見つけられます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "그룹마다 ‘하나만 남기기’를 누르거나 ‘그룹마다 하나만 남기기…’로 모두 처리할 수 있습니다. 모든 그룹에 파일이 최소 하나는 남습니다. 최소 파일 크기에 1 MB와 10 MB가 추가되어 작은 중복 파일도 찾을 수 있습니다."
           }
         }
       }
@@ -10037,6 +10565,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "알 수 없음"
+          }
+        }
+      }
+    },
+    "無法打開終端機" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Could Not Open Terminal"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ターミナルを開けませんでした"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "터미널을 열 수 없습니다"
           }
         }
       }
@@ -10951,6 +11501,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "현재 조건에 맞는 정리 제안이 없습니다."
+          }
+        }
+      }
+    },
+    "目前版本：Hoard %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Current version: Hoard %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "現在のバージョン：Hoard %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "현재 버전: Hoard %@"
           }
         }
       }
@@ -14055,6 +14627,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hoard를 다시 열면 적용됩니다."
+          }
+        }
+      }
+    },
+    "重複檔只留一份" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep One Copy of Duplicate Files"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重複ファイルを1つだけ残す"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "중복 파일 한 개만 남기기"
           }
         }
       }

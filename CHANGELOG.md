@@ -5,13 +5,20 @@ and versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.6.3] - 2026-10-23
+
 ### Fixed
 
-- Uninstalling an administrator-owned app, including App Store apps and apps placed by an installer,
-  failed only after confirmation with “you don't have permission” and removed nothing. The sheet now
-  warns beforehand. On confirmation, Finder moves the app to the Trash (macOS may ask to allow Hoard
-  to control Finder and for an administrator password); Hoard still moves its data. Use Finder's Put
-  Back to restore the app. (`UninstallTests`)
+- **Apps from the App Store could not be uninstalled.** They belong to the administrator (root), as
+  do many apps put in place by an installer, and Hoard runs as you, so moving one to the Trash failed
+  with "you don't have permission" only after you confirmed, and nothing was removed. The uninstall
+  sheet now says so beforehand and, when you confirm, asks Finder to move the app to the Trash
+  (macOS may ask you to let Hoard control Finder, and for an administrator's password); its data
+  still goes through Hoard. Put such an app back with Finder's Put Back. (`UninstallTests`)
+
+### Changed
+
+- The README says where Open in Hoard is: right-click a folder or disk › Services.
 
 ## [0.6.2] - 2026-10-22
 
@@ -114,7 +121,8 @@ and versions follow [Semantic Versioning](https://semver.org/).
 
 First public release.
 
-[Unreleased]: https://github.com/operonlab/hoard/compare/v0.6.2...HEAD
+[Unreleased]: https://github.com/operonlab/hoard/compare/v0.6.3...HEAD
+[0.6.3]: https://github.com/operonlab/hoard/compare/v0.6.2...v0.6.3
 [0.6.2]: https://github.com/operonlab/hoard/compare/v0.6.1...v0.6.2
 [0.6.1]: https://github.com/operonlab/hoard/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/operonlab/hoard/releases/tag/v0.6.0

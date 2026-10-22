@@ -25,14 +25,14 @@ struct MainView: View {
                 .inspectorColumnWidth(min: 240, ideal: 280, max: 360)
         }
         .dropDestination(for: URL.self) { urls, _ in
-            guard let folder = urls.first(where: { (try? $0.resourceValues(forKeys: [.isDirectoryKey]).isDirectory) == true }) else {
-                return false
-            }
-            model.choose(folder.path)
-            return true
+            model.handleOpen(urls)
         }
         .sheet(item: $model.trashRequest) { request in TrashSheet(model: model, request: request) }
         .sheet(item: $model.uninstallRequest) { request in UninstallSheet(model: model, request: request) }
+        .sheet(isPresented: Binding(get: { model.unreadableSheetNode != nil },
+                                    set: { if !$0 { model.unreadableSheetNode = nil } })) {
+            if let node = model.unreadableSheetNode { UnreadableSheet(model: model, node: node) }
+        }
         .sheet(item: $model.accessSheet) { mode in AccessSheet(model: model, mode: mode) }
         .sheet(item: $model.protectRequest) { request in ProtectSheet(model: model, request: request) }
         .sheet(isPresented: Binding(get: { model.whatsNew != nil }, set: { if !$0 { model.closeWhatsNew() } })) {

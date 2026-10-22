@@ -145,7 +145,6 @@ extension AppModel {
 /// 最近變動 (§6).
 struct ChangesView: View {
     @ObservedObject var model: AppModel
-    @State private var filter: Filter = .all
     @State private var selection = Set<String>()
 
     enum Filter: String, CaseIterable, Identifiable {
@@ -191,7 +190,7 @@ struct ChangesView: View {
 
     @ViewBuilder private func content(_ report: DiffReport, baseline: HistoryVersion) -> some View {
         let rows = model.changeRows(report)
-        let shown = rows.filter(matches)
+        let shown = rows.filter { model.changeMatches($0) }
         VStack(alignment: .leading, spacing: 10) {
             HStack(spacing: 8) {
                 Text("最近變動").font(.title2.weight(.semibold))
@@ -204,7 +203,7 @@ struct ChangesView: View {
             if let note = model.changesNote { Text(note).font(.callout).foregroundStyle(.secondary) }
             summaryCards(rows, report: report)
             HStack {
-                Picker("篩選", selection: $filter) {
+                Picker("篩選", selection: $model.changesFilter) {
                     ForEach(Filter.allCases) { Text($0.title).tag($0) }
                 }
                 .pickerStyle(.segmented)
@@ -238,17 +237,6 @@ struct ChangesView: View {
             } primaryAction: { paths in
                 if let id = paths.first.flatMap({ model.tree?.lookup(path: $0) }) { model.reveal(id) }
             }
-        }
-    }
-
-    private func matches(_ row: ChangeRow) -> Bool {
-        switch filter {
-        case .all: return true
-        // An uncertain row may be a permission change, not growth or freed space (same rule as the totals).
-        case .grown: return !row.uncertain && row.delta > 0
-        case .shrunk: return !row.uncertain && row.delta < 0
-        case .added: return row.kind == .added
-        case .removed: return row.kind == .removed
         }
     }
 
@@ -342,6 +330,19 @@ struct ChangesView: View {
             }
         } else {
             ItemMenu(model: model, ids: ids)
+        }
+    }
+}
+
+extension AppModel {
+    func changeMatches(_ row: ChangeRow) -> Bool {
+        switch changesFilter {
+        case .all: return true
+        // An uncertain row may be a permission change, not growth or freed space (same rule as the totals).
+        case .grown: return !row.uncertain && row.delta > 0
+        case .shrunk: return !row.uncertain && row.delta < 0
+        case .added: return row.kind == .added
+        case .removed: return row.kind == .removed
         }
     }
 }

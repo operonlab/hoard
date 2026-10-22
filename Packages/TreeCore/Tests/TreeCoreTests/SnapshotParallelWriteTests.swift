@@ -9,7 +9,9 @@ final class SnapshotParallelWriteTests: XCTestCase {
 
     /// The sequential writer `Snapshot.write` replaced, as it was; returns the file bytes.
     private func oracle(_ tree: FileTree, meta: SnapshotMeta) throws -> [UInt8] {
-        let metadata = try JSONEncoder().encode(meta)
+        var legacyMeta = meta
+        legacyMeta.formatVersion = 2
+        let metadata = try JSONEncoder().encode(legacyMeta)
         let old = tree.nodes
         var ids = [Int32](repeating: -1, count: old.count)
         var live: [Int] = []
@@ -26,7 +28,7 @@ final class SnapshotParallelWriteTests: XCTestCase {
         }
         var out: [UInt8] = [0x44, 0x53, 0x43, 0x4e]
         func put<T: FixedWidthInteger>(_ value: T) { withUnsafeBytes(of: value.littleEndian) { out.append(contentsOf: $0) } }
-        put(UInt32(SnapshotMeta.currentFormat))
+        put(UInt32(2))
         put(UInt32(metadata.count)); out.append(contentsOf: metadata)
         put(UInt32(live.count))
         put(UInt32(names.count)); out.append(contentsOf: names)
@@ -98,7 +100,7 @@ final class SnapshotParallelWriteTests: XCTestCase {
         XCTAssertGreaterThan(tree.nodeCount, 65_536)
         XCTAssertGreaterThan(tree.nodes.filter(\.isRemoved).count, 1_000)
         let url = try directory().appendingPathComponent("big.dscan")
-        try Snapshot.write(tree, meta: meta, to: url)
+        try Snapshot.writeUncompressed(tree, meta: meta, to: url)
         try assertSameSnapshot([UInt8](try Data(contentsOf: url)), try oracle(tree, meta: meta))
         // And it reads back to the same live tree.
         let restored = try Snapshot.read(from: url).tree
@@ -109,7 +111,7 @@ final class SnapshotParallelWriteTests: XCTestCase {
     func testManyBlocksPerChunkMatchSequentialBytes() throws {
         let tree = bigTree()
         let url = try directory().appendingPathComponent("blocks.dscan")
-        try Snapshot.write(tree, meta: meta, to: url, block: 997)
+        try Snapshot.writeUncompressed(tree, meta: meta, to: url, block: 997)
         try assertSameSnapshot([UInt8](try Data(contentsOf: url)), try oracle(tree, meta: meta))
     }
 
@@ -121,7 +123,7 @@ final class SnapshotParallelWriteTests: XCTestCase {
         t.recomputeAggregates()
         t.removeSubtree(x)
         let url = try directory().appendingPathComponent("small.dscan")
-        try Snapshot.write(t, meta: meta, to: url)
+        try Snapshot.writeUncompressed(t, meta: meta, to: url)
         try assertSameSnapshot([UInt8](try Data(contentsOf: url)), try oracle(t, meta: meta))
     }
 

@@ -146,6 +146,7 @@ final class AppModel: ObservableObject {
     @Published private(set) var searchPending = false
     private var searchDebounce: Task<Void, Never>?
     private var jobs: [String: Task<Void, Never>] = [:]
+    private var didEvictSnapshotCache = false
     @Published private(set) var recents: [String] = RootMemory.recents
     @Published private(set) var stats: [ExtensionStat] = []
     @Published var staleMonths = 12 { didSet { if staleMonths != oldValue { updateStale() } } }
@@ -183,6 +184,7 @@ final class AppModel: ObservableObject {
     var spotlightQueue: [(NodeID, String)] = []
     var spotlightTask: Task<Void, Never>?
     // First run, access and errors (§2, §7)
+    @Published var unreadableSheetNode: NodeID?
     @Published var accessSheet: AccessSheetMode?
     @Published var accessBannerDismissed = false
     @Published var accessGained = false
@@ -203,6 +205,8 @@ final class AppModel: ObservableObject {
     @Published var changesPending = false
     @Published var changesNote: String?
     var changesDebounce: Task<Void, Never>?
+    @Published var largestFilter: FileCategory?
+    @Published var changesFilter: ChangesView.Filter = .all
     @Published private(set) var largestRows: [FileRow] = []
     @Published private(set) var largestPending = false
     @Published private(set) var scanning = false
@@ -514,6 +518,8 @@ final class AppModel: ObservableObject {
         let standardized = URL(fileURLWithPath: path).standardizedFileURL.path
         generation += 1
         let token = generation
+        // Node ids belong to one tree: the list of unreadable folders cannot follow it into the next.
+        unreadableSheetNode = nil
         scanTask?.cancel()
         scanWorker?.cancel()
         scanWorker = nil
@@ -609,12 +615,14 @@ final class AppModel: ObservableObject {
                     // The cache may predate a permission grant: retry just the folders it could not read.
                     self.fullDiskAccess = FullDiskAccess.current()
                     if self.fullDiskAccess == .granted { self.updater?.retryUnavailable() }
+                    self.evictSnapshotCacheOnce(keeping: standardized)
                     return
                 } catch {
                     NSLog("Hoard 不使用快取，改全新掃描：%@", String(describing: error))
                 }
             }
             guard token == self.generation, !Task.isCancelled else { return }
+            self.evictSnapshotCacheOnce(keeping: standardized)
             let eventID = LiveUpdater.currentEventId()
             let scanner = ScanCore.Scanner()
             let started = Date()
@@ -673,6 +681,20 @@ final class AppModel: ObservableObject {
                     self.alert = AppAlert(title: String(localized: "無法重新掃描「\(Places.displayName(of: standardized))」"),
                                           message: ScanFailure(path: standardized, error: error).reason)
                 }
+            }
+        }
+    }
+
+    private func evictSnapshotCacheOnce(keeping root: String) {
+        guard !didEvictSnapshotCache, !CommandLine.arguments.contains("--render-to") else { return }
+        didEvictSnapshotCache = true
+        Task.detached(priority: .utility) {
+            let removed = SnapshotCache.evict(
+                in: Snapshot.defaultURL(forRoot: "/").deletingLastPathComponent(),
+                keep: [root], now: Date())
+            if !removed.isEmpty {
+                NSLog("Hoard 已移除 %d 個舊快取，合計 %lld bytes", removed.count,
+                      removed.reduce(Int64(0)) { $0 + $1.bytesFreed })
             }
         }
     }

@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-import TreeCore
+@testable import TreeCore
 
 final class NodeLayoutTests: XCTestCase {
     func testStride() {
@@ -16,7 +16,7 @@ final class NodeLayoutTests: XCTestCase {
         let t = FileTree(rootPath: "/c", device: 1)
         t.addChild(of: FileTree.root, entry: ScanEntry(name: "f", isDirectory: false, allocSize: 1, device: 1))
         t.recomputeAggregates()
-        try Snapshot.write(t, meta: SnapshotMeta(rootPath: "/c", device: 1, createdAt: Date(timeIntervalSinceReferenceDate: 0),
+        try Snapshot.writeUncompressed(t, meta: SnapshotMeta(rootPath: "/c", device: 1, createdAt: Date(timeIntervalSinceReferenceDate: 0),
                                                  scanSeconds: 0, lastEventId: 0, eventsUUID: nil), to: url)
         let valid = [UInt8](try Data(contentsOf: url))
         XCTAssertEqual(try Snapshot.read(from: url).tree[FileTree.root].fileCount, 1)

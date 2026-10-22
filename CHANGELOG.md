@@ -5,6 +5,49 @@ and versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.6.2] - 2026-10-22
+
+### Added
+
+- **Open in Hoard.** A service opens folders and disks in Hoard, and so does dropping a folder on
+  the Dock icon or `open -a Hoard <folder>`. Dropping an App on the window opens its uninstall plan;
+  nothing is removed until you confirm. Previously that drop scanned the App bundle as a folder.
+  (Apps are not taken from the Dock icon: macOS would first ask whether to open the App itself.)
+
+- **File › Export as CSV (⌘⇧E)** saves the list on screen: the folder's items, largest or
+  long-unused files, file types, recent changes, or apps. Sizes are in bytes with a status
+  column, so an unknown size is an empty cell, never 0.
+
+- **A list of the folders Hoard could not read.** The Unaccounted Space card's Unreadable folders
+  row and the inspector of a partly read folder open it: every unreadable folder, grouped by reason.
+  `hoard hidden --json` lists them too (`unreadable_folders`, `unreadable_total`,
+  `unreadable_by_reason`).
+
+### Changed
+
+- **Cached scans take about a fifth of the space.** They are now compressed (LZFSE, in parallel
+  chunks, each with a checksum): a whole-disk cache of 4.0 million items went from 560.6 MB to
+  115.3 MB, and reading it takes about 0.05 s longer (0.13 s before, 0.17–0.20 s after). Caches
+  written by 0.6.1 and earlier are still read; Hoard 0.6.1 and earlier scan again instead of reading
+  a new cache.
+
+### Fixed
+
+- **Cached scans were never removed.** On one Mac `~/Library/Caches/Hoard` reached 1.1 GB, including
+  caches for folders that no longer exist. Once per launch, after the first folder is opened, the app
+  now removes caches whose folder is gone (a folder on a disk that is not connected is not gone),
+  caches not used for 30 days, ones whose header it cannot read, and temporary files left by saves
+  that never finished. These are Hoard's own files; the
+  history behind Recent Changes is never removed, nothing of yours is touched, and the CLI never
+  removes caches. (`SnapshotCacheTests`)
+- **Every unreadable folder said "no permission".** The inspector showed the same line for a folder
+  only in iCloud, one macOS keeps from every app, one whose file permissions leave you out, and one
+  that failed with a read error, so the advice was often wrong. Hoard now checks the folder (without
+  downloading anything) and says which it is, with the fix when there is one: granting Full Disk
+  Access, rescanning a folder that can be read now, or where to look at the permissions. A check that
+  cannot finish within a few seconds, for example on a stalled network volume, says the reason is
+  unknown. (`UnreadableTests`)
+
 ## [0.6.1] - 2026-10-22
 
 ### Added
@@ -63,6 +106,7 @@ and versions follow [Semantic Versioning](https://semver.org/).
 
 First public release.
 
-[Unreleased]: https://github.com/operonlab/hoard/compare/v0.6.1...HEAD
+[Unreleased]: https://github.com/operonlab/hoard/compare/v0.6.2...HEAD
+[0.6.2]: https://github.com/operonlab/hoard/compare/v0.6.1...v0.6.2
 [0.6.1]: https://github.com/operonlab/hoard/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/operonlab/hoard/releases/tag/v0.6.0

@@ -120,11 +120,7 @@ extension AppModel {
 
     func landAppFootprint(_ result: AppWorkResult) {
         guard result.generation == generation, view == .apps else { return }
-        switch result.outcome {
-        case .success(let report): appReport = report; appError = nil
-        case .failure(let error): appReport = nil; appError = error
-        }
-        appPending = false
+        landUninstallReport(result.outcome)
     }
 
     func findDuplicates() {

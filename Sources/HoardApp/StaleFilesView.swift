@@ -94,7 +94,7 @@ struct StaleFilesView: View {
     var body: some View {
         let result = model.staleResult
         let dropped = result.map { model.openedSinceCutoff($0) } ?? []
-        let rows = result?.rows.filter { !dropped.contains($0.id) } ?? []
+        let rows = model.visibleStaleRows
         VStack(spacing: 0) {
             VStack(alignment: .leading, spacing: 6) {
                 HStack(spacing: 8) {
@@ -154,5 +154,13 @@ struct StaleFilesView: View {
             return String(localized: "\(model.scopeName) 裡找到 \(result.count - dropped.count) 個，共 \(Fmt.bytes(result.bytes - droppedBytes))。已排除 \(dropped.count) 個 Spotlight 記錄最近打開過的檔案。")
         }
         return String(localized: "\(model.scopeName) 裡找到 \(result.count - dropped.count) 個，共 \(Fmt.bytes(result.bytes - droppedBytes))。")
+    }
+}
+
+extension AppModel {
+    var visibleStaleRows: [FileRow] {
+        guard let result = staleResult else { return [] }
+        let dropped = openedSinceCutoff(result)
+        return result.rows.filter { !dropped.contains($0.id) }
     }
 }

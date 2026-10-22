@@ -516,6 +516,8 @@ final class AppModel: ObservableObject {
         let standardized = URL(fileURLWithPath: path).standardizedFileURL.path
         generation += 1
         let token = generation
+        // Node ids belong to one tree: the list of unreadable folders cannot follow it into the next.
+        unreadableSheetNode = nil
         scanTask?.cancel()
         scanWorker?.cancel()
         scanWorker = nil

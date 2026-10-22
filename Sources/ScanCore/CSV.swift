@@ -20,7 +20,9 @@ public struct CSVTable: Equatable, Sendable {
             case .bool(let value): return value ? "true" : "false"
             case .empty: return ""
             case .text(let original):
-                let guarded = original.first.map { "=+-@\t\r".contains($0) } == true ? "'" + original : original
+                // By scalar, not Character: "=" followed by a combining mark is one Character but still a formula.
+                let lead = original.unicodeScalars.first.map { "=+-@\t\r".unicodeScalars.contains($0) } == true
+                let guarded = lead ? "'" + original : original
                 if guarded.unicodeScalars.contains(where: { $0 == "," || $0 == "\"" || $0 == "\r" || $0 == "\n" }) {
                     return "\"" + guarded.replacingOccurrences(of: "\"", with: "\"\"") + "\""
                 }

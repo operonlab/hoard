@@ -18,6 +18,8 @@ final class CSVTests: XCTestCase {
             XCTAssertTrue(csv.contains("'" + lead + "SUM(1)"), "unguarded: \(lead)")
         }
         XCTAssertEqual(String(decoding: CSVTable(header: ["normal"], rows: [[.text("normal")]]).encoded().dropFirst(3), as: UTF8.self), "normal\r\nnormal\r\n")
+        let combining = String(decoding: CSVTable(header: [], rows: [[.text("=\u{301}SUM(1)")]]).encoded().dropFirst(3), as: UTF8.self)
+        XCTAssertTrue(combining.contains("'=\u{301}SUM(1)"), "unguarded: = with a combining mark")
     }
 
     func testChildren() {

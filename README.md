@@ -50,6 +50,8 @@ same way: it remembers where your space went, protects what you mark, and leaves
 - **Finds what to clear.** Largest files, files you have not opened in a long time, file types,
   duplicates, similar photos, and what grew since the last scan.
 - **Uninstalls apps with their leftovers** (caches, preferences, containers), after you confirm.
+  Drop an app on the window to start.
+- **Exports any list as CSV**, with an unknown size left empty rather than written as 0.
 - **Protects what matters.** *Lock* a file or folder so it cannot be deleted or moved; *guard* one so
   Hoard puts it back if it is deleted.
 - English, 繁體中文, 日本語 and 한국어.

@@ -3219,6 +3219,28 @@
         }
       }
     },
+    "「檔案 › 匯出為 CSV…」（⌘⇧E）把畫面上的清單存成試算表能開的檔案。查不到的大小會留空，不會寫成 0。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "File › Export as CSV (⌘⇧E) saves the list on screen as a file any spreadsheet opens. A size that could not be measured is left empty, never written as 0."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "「ファイル › CSV として書き出す…」（⌘⇧E）で、画面のリストを表計算アプリで開けるファイルに保存します。測れなかったサイズは 0 ではなく空欄になります。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "「파일 › CSV로 내보내기…」(⌘⇧E)로 화면의 목록을 스프레드시트에서 열 수 있는 파일로 저장합니다. 측정하지 못한 크기는 0이 아니라 빈칸으로 남습니다."
+          }
+        }
+      }
+    },
     "「系統資料」是什麼" : {
       "localizations" : {
         "en" : {
@@ -5123,6 +5145,28 @@
         }
       }
     },
+    "匯出成 CSV" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export as CSV"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CSV に書き出し"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CSV로 내보내기"
+          }
+        }
+      }
+    },
     "匯出為 CSV…" : {
       "localizations" : {
         "en" : {
@@ -6293,6 +6337,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "이미 켰다면 Hoard를 종료한 다음 다시 여십시오."
+          }
+        }
+      }
+    },
+    "存下來的掃描結果改成壓縮，整顆磁碟的快取從約 560 MB 變成約 115 MB；已經不在或 30 天沒用的位置，快取會自動清掉。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saved scans are now compressed: a whole-disk cache went from about 560 MB to about 115 MB. Caches for locations that are gone or unused for 30 days are removed automatically."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存したスキャン結果を圧縮するようになり、ディスク全体のキャッシュが約 560 MB から約 115 MB になりました。存在しない場所や 30 日使っていない場所のキャッシュは自動で削除されます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "저장된 스캔 결과를 압축하여 디스크 전체 캐시가 약 560MB에서 약 115MB로 줄었습니다. 없어졌거나 30일 동안 사용하지 않은 위치의 캐시는 자동으로 지워집니다."
           }
         }
       }
@@ -8117,6 +8183,50 @@
         }
       }
     },
+    "把 App 拖到 Hoard 的視窗，會列出它和它的資料，確認後才丟到垃圾桶。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drop an app on the Hoard window to see it with its data; nothing goes to the Trash until you confirm."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アプリを Hoard のウインドウにドロップすると、アプリとそのデータが一覧表示されます。確認するまでゴミ箱には入りません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "앱을 Hoard 창에 끌어다 놓으면 앱과 그 데이터가 표시되며, 확인하기 전에는 휴지통으로 옮기지 않습니다."
+          }
+        }
+      }
+    },
+    "把 App 拖進來解除安裝" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drop an app to uninstall it"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アプリをドロップしてアンインストール"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "앱을 끌어다 놓아 제거"
+          }
+        }
+      }
+    },
     "把「%@」移到垃圾桶" : {
       "localizations" : {
         "en" : {
@@ -8317,6 +8427,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "홈 폴더 ‘%@’ 스캔"
+          }
+        }
+      }
+    },
+    "掃描快取變小了" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Smaller scan caches"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "スキャンのキャッシュが小さくなりました"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "스캔 캐시가 작아졌습니다"
           }
         }
       }
@@ -8669,6 +8801,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "추가됨"
+          }
+        }
+      }
+    },
+    "新增「用 Hoard 打開」服務，也可以把資料夾拖到 Dock 上的 Hoard 圖示來打開。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A new Open in Hoard service, and a folder dropped on Hoard in the Dock opens too."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "「Hoard で開く」サービスを追加しました。Dock の Hoard アイコンにフォルダをドロップしても開けます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "「Hoard에서 열기」 서비스가 추가되었고, Dock의 Hoard 아이콘에 폴더를 끌어다 놓아도 열립니다."
           }
         }
       }
@@ -9583,6 +9737,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "보기"
+          }
+        }
+      }
+    },
+    "檢閱器和「看不到的空間」的新清單會逐個說明讀不到的原因：需要完整磁碟取用權限、macOS 保護、檔案權限、只在 iCloud、已不存在或讀取錯誤；有辦法解決的會附上按鈕。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The inspector and a new list from Unaccounted Space say why each folder could not be read: Full Disk Access is needed, macOS protects it, file permissions, only in iCloud, gone, or a read error. When there is a fix, a button offers it."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "インスペクタと「未計上の領域」の新しいリストが、フォルダを読めなかった理由を一つずつ示します。フルディスクアクセスが必要、macOS による保護、ファイルのアクセス権、iCloud のみ、存在しない、読み取りエラーのいずれかです。解決できる場合はボタンが表示されます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "속성 패널과 미확인 공간의 새 목록이 폴더를 읽을 수 없는 이유를 하나씩 알려 줍니다. 전체 디스크 접근 권한 필요, macOS 보호, 파일 권한, iCloud에만 있음, 존재하지 않음, 읽기 오류 중 하나이며, 해결할 수 있으면 버튼이 함께 표시됩니다."
           }
         }
       }
@@ -11595,6 +11771,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "현재: %@"
+          }
+        }
+      }
+    },
+    "用 Hoard 打開" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open in Hoard"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoard で開く"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoard에서 열기"
           }
         }
       }
@@ -13679,6 +13877,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "읽을 수 없는 폴더"
+          }
+        }
+      }
+    },
+    "讀不到的資料夾會說原因" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unreadable folders say why"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "読めないフォルダの理由がわかる"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "읽을 수 없는 폴더의 이유를 알려 줍니다"
           }
         }
       }

@@ -16,7 +16,22 @@ final class UninstallTests: XCTestCase {
         try FileManager.default.createDirectory(atPath: appPath + "/Contents/MacOS", withIntermediateDirectories: true)
     }
 
-    override func tearDownWithError() throws { try FileManager.default.removeItem(at: root) }
+    override func tearDownWithError() throws {
+        try FileManager.default.setAttributes([.posixPermissions: 0o755], ofItemAtPath: appPath)
+        try FileManager.default.removeItem(at: root)
+    }
+
+    func testAppMovePermissionInPlan() throws {
+        let normal = plan(app())
+        XCTAssertNil(normal.refusal)
+        XCTAssertFalse(normal.appNeedsAdmin)
+        try FileManager.default.setAttributes([.posixPermissions: 0o555], ofItemAtPath: appPath)
+        let restricted = plan(app())
+        XCTAssertNil(restricted.refusal)
+        XCTAssertTrue(restricted.appNeedsAdmin)
+        XCTAssertEqual(restricted.items, normal.items)
+        XCTAssertEqual(restricted.kept, normal.kept)
+    }
 
     private func app(bundle: String? = "com.example.foo", apple: Bool = false, link: String? = nil,
                      locations: [AppDataLocation] = []) -> AppFootprint {

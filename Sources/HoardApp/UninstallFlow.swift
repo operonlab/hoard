@@ -9,6 +9,44 @@ struct UninstallRequest: Identifiable {
     let plan: UninstallPlan
 }
 
+private enum FinderUninstallError: Error {
+    case cancelled, denied, timedOut, failed(String)
+}
+
+private func moveAppWithFinder(_ path: String) throws {
+    guard let restore = Materialization.offForThread("Finder uninstall move") else {
+        throw FinderUninstallError.failed(Materialization.refusedDetail)
+    }
+    defer { restore() }
+    let process = Process()
+    process.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
+    process.arguments = ["-e", "on run argv", "tell application \"Finder\" to set moved to delete (POSIX file (item 1 of argv) as alias)",
+                         "return POSIX path of (moved as alias)", "end run", path]
+    let stdout = Pipe(), stderr = Pipe()
+    process.standardOutput = stdout; process.standardError = stderr
+    // Set before run(): a Finder that answers at once would otherwise finish before anyone listens.
+    let done = DispatchSemaphore(value: 0)
+    process.terminationHandler = { _ in done.signal() }
+    try process.run()
+    if done.wait(timeout: .now() + 300) == .timedOut {
+        process.terminate()
+        throw FinderUninstallError.timedOut
+    }
+    let output = String(data: stdout.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8)?
+        .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+    let error = String(data: stderr.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8)?
+        .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+    if process.terminationStatus != 0 {
+        if error.contains("(-128)") { throw FinderUninstallError.cancelled }
+        if error.contains("(-1743)") { throw FinderUninstallError.denied }
+        throw FinderUninstallError.failed(error)
+    }
+    guard !FileManager.default.fileExists(atPath: path),
+          output.hasPrefix("/"), FileManager.default.fileExists(atPath: output) else {
+        throw FinderUninstallError.failed("Finder 未確認 App 已移到垃圾桶。")
+    }
+}
+
 @MainActor private var pendingUninstallPath: (model: ObjectIdentifier, path: String, generation: Int)?
 
 extension AppModel {
@@ -119,13 +157,13 @@ extension AppModel {
                     self.alert = AppAlert(title: String(localized: "沒有丟到垃圾桶"), message: String(localized: "「\(plan.name)」正在執行，請先結束它。"))
                     return
                 }
-                self.moveUninstallToTrash(bundle: bundle, plan: plan, selected: selected, protected: protected)
+                await self.moveUninstallToTrash(bundle: bundle, plan: plan, selected: selected, protected: protected)
             }
         }
     }
 
     private func moveUninstallToTrash(bundle: UninstallItem, plan: UninstallPlan, selected: Set<String>,
-                                      protected: [ProtectedItem]) {
+                                      protected: [ProtectedItem]) async {
         guard let restore = Materialization.offForThread("uninstall move") else {
             alert = AppAlert(title: String(localized: "沒有丟到垃圾桶"), message: Materialization.refusedDetail)
             return
@@ -181,15 +219,7 @@ extension AppModel {
         var logged: [CleanupLogEntry] = []
         var bytes: Int64 = 0
         var partial = false
-        func trash(_ item: UninstallItem) throws {
-            var before = stat()
-            guard lstat(item.path, &before) == 0 else { throw CocoaError(.fileNoSuchFile) }
-            var resulting: NSURL?
-            try FileManager.default.trashItem(at: URL(fileURLWithPath: item.path), resultingItemURL: &resulting)
-            if let inTrash = resulting as URL? {
-                moved.append(.init(original: URL(fileURLWithPath: item.path), inTrash: inTrash,
-                                   isDirectory: before.st_mode & S_IFMT == S_IFDIR))
-            }
+        func record(_ item: UninstallItem) {
             bytes += item.size.bytes ?? 0
             partial = partial || item.size.status != .complete || item.size.bytes == nil
             logged.append(CleanupLogEntry(date: Date(), path: item.path, bytes: item.size.bytes ?? 0,
@@ -203,6 +233,17 @@ extension AppModel {
                 }
             }
         }
+        func trash(_ item: UninstallItem) throws {
+            var before = stat()
+            guard lstat(item.path, &before) == 0 else { throw CocoaError(.fileNoSuchFile) }
+            var resulting: NSURL?
+            try FileManager.default.trashItem(at: URL(fileURLWithPath: item.path), resultingItemURL: &resulting)
+            if let inTrash = resulting as URL? {
+                moved.append(.init(original: URL(fileURLWithPath: item.path), inTrash: inTrash,
+                                   isDirectory: before.st_mode & S_IFMT == S_IFDIR))
+            }
+            record(item)
+        }
         guard let running = InstalledApps.runningPaths() else {
             alert = AppAlert(title: String(localized: "沒有丟到垃圾桶"), message: String(localized: "無法確認這個 App 有沒有在執行，所以沒有移除。"))
             return
@@ -212,9 +253,23 @@ extension AppModel {
             alert = AppAlert(title: String(localized: "沒有丟到垃圾桶"), message: String(localized: "「\(plan.name)」正在執行，請先結束它。"))
             return
         }
-        do { try trash(bundle) }
+        let finderMoved = !UninstallPlanner.userCanMove(bundle.path)
+        do {
+            if finderMoved {
+                try await Task.detached(priority: .userInitiated) { try moveAppWithFinder(bundle.path) }.value
+                record(bundle)
+            } else { try trash(bundle) }
+        }
         catch {
-            alert = AppAlert(title: String(localized: "沒有丟到垃圾桶"), message: String(localized: "App 本體無法移動：\(Self.reason(error))"))
+            let message: String
+            switch error {
+            case FinderUninstallError.cancelled: message = String(localized: "你取消了，沒有移除任何東西。")
+            case FinderUninstallError.denied: message = String(localized: "Hoard 沒有控制 Finder 的權限。可以在 系統設定 › 隱私權與安全性 › 自動化 允許，或在 Finder 裡自己把它丟到垃圾桶。")
+            case FinderUninstallError.timedOut: message = String(localized: "Finder 沒有在 5 分鐘內完成，沒有移除任何東西。")
+            case FinderUninstallError.failed(let detail): message = String(localized: "App 本體無法移動：\(detail)")
+            default: message = String(localized: "App 本體無法移動：\(Self.reason(error))")
+            }
+            alert = AppAlert(title: String(localized: "沒有丟到垃圾桶"), message: message)
             return
         }
         for item in ready {
@@ -236,6 +291,10 @@ extension AppModel {
         writeCleanupLog(logged, failureTitle: String(localized: "清理紀錄未寫入"), failureText: String(localized: "項目已移到垃圾桶，但無法保存清理紀錄"))
         if !skipped.isEmpty {
             alert = AppAlert(title: String(localized: "部分項目已保留"), message: skipped.joined(separator: "\n"))
+        }
+        if finderMoved {
+            let note = String(localized: "「\(plan.name)」由 Finder 丟到垃圾桶。要放回，請在垃圾桶裡用「放回原處」。")
+            alert = AppAlert(title: String(localized: "已丟到垃圾桶"), message: ([note] + skipped).joined(separator: "\n"))
         }
         updateAppFootprint()
     }
@@ -291,6 +350,10 @@ struct UninstallSheet: View {
                     }
                 }.frame(maxHeight: 330)
                 Text("已選總計 \(sizeText(total))").fontWeight(.medium)
+                if plan.appNeedsAdmin {
+                    Text("「\(plan.name)」屬於系統管理員（例如從 App Store 安裝）。按下後會請 Finder 把它丟到垃圾桶，macOS 可能先問是否允許 Hoard 控制 Finder，再要求管理員密碼。它的資料仍由 Hoard 丟到垃圾桶。")
+                        .fixedSize(horizontal: false, vertical: true)
+                }
                 VStack(alignment: .leading, spacing: 5) {
                     bullet(String(localized: "這些項目會移到垃圾桶。之後可以從垃圾桶放回原處，或在 Hoard 選「編輯 › 還原」。"))
                     bullet(String(localized: "清空垃圾桶後才會釋放空間；實際可能因共用資料不同。"))

@@ -353,7 +353,7 @@ or `null`) and `status`. Each location has `path`, `kind`, `matched_by`,
 `matched_id`, `size`, `sized_from`, `is_symlink`, and `shared_with`.
 
 `uninstall-plan <app path | bundle id | app name> [--json]` returns `schema`,
-`command`, `app_path`, `name`, `bundle_id`, `refusal`, `items`, `kept`, and
+`command`, `app_path`, `name`, `bundle_id`, `refusal`, `app_needs_admin` (boolean), `items`, `kept`, and
 `total_default`. Each item has `path`, `role`, `kind`, `size`, `why`, and
 `selected_by_default`; each kept entry has `path` and `why`. The MCP equivalent
 is `disk_uninstall_plan` with input `app`. Both are read-only; nothing is removed.

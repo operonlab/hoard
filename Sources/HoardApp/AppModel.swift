@@ -302,9 +302,7 @@ final class AppModel: ObservableObject {
 
     func closeWhatsNew() {
         whatsNew = nil
-        if !CommandLine.arguments.contains("--whats-new") {
-            UserDefaults.standard.set(WhatsNew.currentVersion, forKey: WhatsNew.seenKey)
-        }
+        if !CommandLine.arguments.contains("--whats-new") { WhatsNew.recordSeen() }
     }
 
     /// Re-probes the permission (on activation). When it has just been granted, retries only the

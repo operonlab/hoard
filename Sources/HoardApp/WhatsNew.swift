@@ -1,4 +1,5 @@
 import AppKit
+import ScanCore
 import SwiftUI
 
 struct WhatsNewItem {
@@ -31,6 +32,15 @@ enum WhatsNew {
     static let seenKey = "whatsNewSeenVersion"
     static var currentVersion: String {
         Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0"
+    }
+
+    /// Records the running version as seen, but never lowers it: after running an older build, the
+    /// newer build's notes would otherwise show again.
+    static func recordSeen() {
+        let defaults = UserDefaults.standard
+        if let seen = defaults.string(forKey: seenKey),
+           WhatsNewPolicy.compare(seen, currentVersion) == .orderedDescending { return }
+        defaults.set(currentVersion, forKey: seenKey)
     }
 }
 

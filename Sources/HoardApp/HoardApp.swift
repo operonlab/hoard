@@ -89,7 +89,7 @@ enum LaunchOptions {
                 hasPriorUse: defaults.string(forKey: RootMemory.lastRootKey) != nil,
                 available: WhatsNew.releases.map(\.version))
             if versions.isEmpty {
-                defaults.set(WhatsNew.currentVersion, forKey: WhatsNew.seenKey)
+                WhatsNew.recordSeen()
             } else if model.trashRequest == nil && model.uninstallRequest == nil && model.accessSheet == nil &&
                         model.protectRequest == nil && model.alert == nil {
                 model.whatsNew = versions.compactMap { version in

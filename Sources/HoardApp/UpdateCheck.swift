@@ -5,29 +5,28 @@ enum UpdateCheck {
     static let releasesURL = URL(string: "https://github.com/operonlab/hoard/releases")!
     static let formula = "operonlab/tap/hoard"
 
-    /// The hoard command-line tool came from Homebrew: its keg exists.
-    static var cliFromHomebrew: Bool {
-        ["/opt/homebrew/Cellar/hoard", "/usr/local/Cellar/hoard"].contains {
-            FileManager.default.fileExists(atPath: $0)
-        }
+    /// The brew of the Homebrew that installed the hoard command-line tool (its keg is in that
+    /// prefix), or nil when Homebrew did not. A Mac can have both prefixes; only the owning one can
+    /// upgrade it.
+    static var homebrew: String? {
+        ["/opt/homebrew", "/usr/local"].first {
+            FileManager.default.fileExists(atPath: $0 + "/Cellar/hoard")
+        }.map { $0 + "/bin/brew" }
     }
 
-    /// A login shell finds Homebrew on PATH wherever it was installed.
-    static let script = """
-    #!/bin/zsh -l
-    # Written by Hoard: updates the hoard command-line tool with Homebrew.
-    if ! command -v brew >/dev/null 2>&1; then
-      echo "Homebrew was not found: https://brew.sh"
-      exit 1
-    fi
-    brew upgrade operonlab/tap/hoard
-    """
+    static func script(brew: String) -> String {
+        """
+        #!/bin/zsh
+        # Written by Hoard: updates the hoard command-line tool with the Homebrew that installed it.
+        '\(brew)' upgrade \(formula)
+        """
+    }
 
     /// `failed` runs on the main queue when the script cannot be written or Terminal cannot open it.
-    static func runInTerminal(failed: @escaping @MainActor (Error) -> Void) {
+    static func runInTerminal(brew: String, failed: @escaping @MainActor (Error) -> Void) {
         let url = FileManager.default.temporaryDirectory.appendingPathComponent("hoard-update.command")
         do {
-            try script.write(to: url, atomically: true, encoding: .utf8)
+            try script(brew: brew).write(to: url, atomically: true, encoding: .utf8)
             try FileManager.default.setAttributes([.posixPermissions: 0o700], ofItemAtPath: url.path)
         } catch {
             Task { @MainActor in failed(error) }
@@ -53,12 +52,12 @@ struct UpdateSheet: View {
                 .fixedSize(horizontal: false, vertical: true)
             Button("打開版本頁") { NSWorkspace.shared.open(UpdateCheck.releasesURL) }
             Divider()
-            if UpdateCheck.cliFromHomebrew {
+            if let brew = UpdateCheck.homebrew {
                 Text("命令列工具是用 Homebrew 安裝的。")
                 Button("在終端機更新命令列工具") {
                     // The sheet closes first: an alert set while a sheet is up is not shown.
                     model.updateCheckShown = false
-                    UpdateCheck.runInTerminal { error in
+                    UpdateCheck.runInTerminal(brew: brew) { error in
                         model.alert = AppAlert(title: String(localized: "無法打開終端機"),
                                                message: error.localizedDescription)
                     }

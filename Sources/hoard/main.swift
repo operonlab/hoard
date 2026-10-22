@@ -295,10 +295,25 @@ private func runInsights(_ a: Args, capture: ResultCapture?) throws -> Bool {
              "state": line.state.rawValue, "kind": line.kind.rawValue,
              "count": line.count.map { $0 as Any } ?? NSNull(), "how": line.how]
         }
+        let unreadable = tree.map { Unreadable.folders(in: $0, under: FileTree.root, limit: 100) }
+        let access = FullDiskAccess.current()
+        let diagnosed = (unreadable?.paths ?? []).map { path -> (String, UnreadableDiagnosis) in
+            (path, Unreadable.diagnose(path, fullDiskAccess: access))
+        }
+        var byReason: [String: Int] = [:]
+        let unreadableRows: [[String: Any]] = diagnosed.map { path, diagnosis in
+            byReason[diagnosis.reason.rawValue, default: 0] += 1
+            return ["path": path, "reason": diagnosis.reason.rawValue,
+                    "errno": diagnosis.errno.map { $0 as Any } ?? NSNull(),
+                    "owner": diagnosis.owner.map { $0 as Any } ?? NSNull()]
+        }
         let out: [String: Any] = ["schema": schema, "command": "hidden", "path": report.rootPath,
                                   "source": source, "status": tree == nil ? "cancelled" : status(tree![FileTree.root].status),
                                   "mount_point": report.mountPoint.map { $0 as Any } ?? NSNull(),
-                                  "covers_volume": report.coversVolume, "lines": lines]
+                                  "covers_volume": report.coversVolume, "lines": lines,
+                                  "unreadable_folders": unreadableRows,
+                                  "unreadable_total": unreadable.map { $0.total as Any } ?? NSNull(),
+                                  "unreadable_by_reason": byReason]
         try emit(out, a.json, to: capture) {
             for line in report.lines { print("\(line.label): \(line.bytes.map(fmt) ?? "unknown") [\(line.state.rawValue)]") }
         }
@@ -813,7 +828,8 @@ private func boundedInsight(_ args: Args) throws -> [String: Any] {
                     "pending_files": 0, "images_per_second": 0, "reclaimable_bytes": NSNull(), "omitted": 0]
         case "hidden":
             return ["schema": schema, "command": "hidden", "path": args.path, "status": "cancelled",
-                    "source": "deadline", "mount_point": NSNull(), "covers_volume": false, "lines": []]
+                    "source": "deadline", "mount_point": NSNull(), "covers_volume": false, "lines": [],
+                    "unreadable_folders": [], "unreadable_total": NSNull(), "unreadable_by_reason": [:]]
         case "cleanup-log":
             return ["schema": schema, "command": "cleanup-log", "status": "unavailable", "log": try CleanupLogCommand.displayPath(),
                     "reason": "deadline exceeded", "entries": [], "total_bytes": NSNull(), "omitted": 0]

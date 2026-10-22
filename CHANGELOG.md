@@ -5,6 +5,14 @@ and versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- **Unreadable folders now explain why.** The inspector and a new list from the Unaccounted Space
+  card's Unreadable folders row say whether Full Disk Access is needed, macOS protects the folder,
+  its file permissions keep you out, it is only in iCloud, it is gone, or a read error occurred.
+  When there is a fix, Hoard offers it. `hoard hidden --json` also lists them in
+  `unreadable_folders`.
+
 ### Changed
 
 - **Cached scans take about a fifth of the space.** They are now compressed (LZFSE, in parallel

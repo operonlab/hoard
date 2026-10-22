@@ -185,6 +185,10 @@ struct CleanupView: View {
                                 Text("（\(count) 個）").foregroundStyle(.secondary)
                             }
                             Spacer(minLength: 8)
+                            if line.id == "unreadable", let count = line.count, count > 0, model.tree != nil {
+                                Button("看原因…") { model.unreadableSheetNode = FileTree.root }
+                                    .buttonStyle(.borderless)
+                            }
                             Text(line.sizeText).monospacedDigit()
                         }
                         if line.state == .unknown {

@@ -16,9 +16,10 @@ and versions follow [Semantic Versioning](https://semver.org/).
 ### Fixed
 
 - **Cached scans were never removed.** On one Mac `~/Library/Caches/Hoard` reached 1.1 GB, including
-  caches for folders that no longer exist. Once per launch the app now removes caches whose folder is
-  gone (a folder on a disk that is not connected is not gone), caches not used for 30 days, unreadable
-  ones, and temporary files left by saves that never finished. These are Hoard's own files; the
+  caches for folders that no longer exist. Once per launch, after the first folder is opened, the app
+  now removes caches whose folder is gone (a folder on a disk that is not connected is not gone),
+  caches not used for 30 days, ones whose header it cannot read, and temporary files left by saves
+  that never finished. These are Hoard's own files; the
   history behind Recent Changes is never removed, nothing of yours is touched, and the CLI never
   removes caches. (`SnapshotCacheTests`)
 

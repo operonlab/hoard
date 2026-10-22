@@ -74,5 +74,15 @@ final class SnapshotCompressedTests: XCTestCase {
             XCTAssertThrowsError(try Snapshot.read(from: url)) { XCTAssertEqual($0 as? SnapshotError, .truncated) }
         }
     }
+
+    /// A file that claims to expand far beyond what real caches do is refused before any memory is
+    /// allocated for it.
+    func testImplausibleExpansionIsRefused() {
+        XCTAssertTrue(Snapshot.rawLengthPlausible(560_622_506, fileSize: 115_300_000))
+        XCTAssertTrue(Snapshot.rawLengthPlausible(64 << 20, fileSize: 1_024))
+        XCTAssertFalse(Snapshot.rawLengthPlausible((64 << 20) + 1, fileSize: 1_024))
+        XCTAssertFalse(Snapshot.rawLengthPlausible(8 << 30, fileSize: 300_000))
+        XCTAssertTrue(Snapshot.rawLengthPlausible(Int.max, fileSize: Int.max / 2))
+    }
     #endif
 }

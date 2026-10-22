@@ -44,6 +44,13 @@ public enum SnapshotError: Error, Equatable, LocalizedError {
 public enum Snapshot {
     private static let recordSize = 118
 
+    /// Real caches expand about 5×. A file claiming far more is damaged or crafted, and decoding it would
+    /// mean allocating that much memory first; small files may claim up to 64 MiB.
+    static func rawLengthPlausible(_ rawLength: Int, fileSize: Int) -> Bool {
+        let (limit, overflow) = fileSize.multipliedReportingOverflow(by: 50)
+        return rawLength <= max(64 << 20, overflow ? Int.max : limit)
+    }
+
     static func checksum(_ bytes: UnsafeRawBufferPointer) -> UInt64 {
         var h: UInt64 = 0xcbf29ce484222325
         var cursor = 0
@@ -86,57 +93,70 @@ public enum Snapshot {
             let bodyLength = source.count - bodyStart
             let chunkCount = (bodyLength / chunkBytes) + (bodyLength % chunkBytes == 0 ? 0 : 1)
             guard chunkCount <= Int(UInt32.max) else { throw SnapshotError.truncated }
-            var compressed = [[UInt8]](repeating: [], count: chunkCount)
-            var checksums = [UInt64](repeating: 0, count: chunkCount)
-            var failed = [Bool](repeating: false, count: chunkCount)
-            compressed.withUnsafeMutableBufferPointer { outputs in
-                checksums.withUnsafeMutableBufferPointer { hashes in
-                    failed.withUnsafeMutableBufferPointer { failures in
-                        DispatchQueue.concurrentPerform(iterations: chunkCount) { i in
-                            let offset = bodyStart + i * chunkBytes
-                            let length = min(chunkBytes, source.count - offset)
-                            let input = UnsafeRawBufferPointer(start: source.baseAddress! + offset, count: length)
-                            hashes[i] = checksum(input)
-                            var output = [UInt8](repeating: 0, count: length + 64)
-                            let encoded = output.withUnsafeMutableBufferPointer { dest in
-                                compression_encode_buffer(dest.baseAddress!, dest.count,
-                                                          input.baseAddress!.assumingMemoryBound(to: UInt8.self), length,
-                                                          nil, COMPRESSION_LZFSE)
-                            }
-                            if encoded == 0 { failures[i] = true; return }
-                            output.removeSubrange(encoded..<output.count)
-                            outputs[i] = output
-                        }
-                    }
-                }
-            }
-            guard !failed.contains(true) else { throw SnapshotError.truncated }
             var header = Data([0x44, 0x53, 0x43, 0x4e])
-            func append<T: FixedWidthInteger>(_ value: T) { withUnsafeBytes(of: value.littleEndian) { header.append(contentsOf: $0) } }
+            func append<T: FixedWidthInteger>(_ value: T, to data: inout Data) {
+                withUnsafeBytes(of: value.littleEndian) { data.append(contentsOf: $0) }
+            }
             var compressedMeta = meta
             compressedMeta.formatVersion = 3
             let json = try JSONEncoder().encode(compressedMeta)
             guard json.count <= Int(UInt32.max) else { throw SnapshotError.truncated }
-            append(UInt32(3)); append(UInt32(json.count))
-            header.append(json); append(UInt64(bodyLength)); append(UInt32(chunkCount))
-            for i in 0..<chunkCount {
-                append(UInt32(min(chunkBytes, bodyLength - i * chunkBytes)))
-                append(UInt32(compressed[i].count)); append(checksums[i])
-            }
+            append(UInt32(3), to: &header); append(UInt32(json.count), to: &header)
+            header.append(json); append(UInt64(bodyLength), to: &header); append(UInt32(chunkCount), to: &header)
+            // The chunk table is filled in once every chunk is written: its slot is reserved here.
+            let tableAt = header.count
+            header.append(Data(count: chunkCount * 16))
             let temp = url.deletingLastPathComponent().appendingPathComponent(".\(url.lastPathComponent).\(UUID().uuidString).tmp")
             let fd = open(temp.path, O_WRONLY | O_CREAT | O_EXCL, 0o666)
             guard fd >= 0 else { throw POSIXError(POSIXErrorCode(rawValue: errno) ?? .EIO) }
             var closed = false
             do {
                 defer { if !closed { close(fd) } }
-                var offset = 0
-                func put(_ bytes: UnsafeRawBufferPointer) throws {
+                func put(_ bytes: UnsafeRawBufferPointer, at offset: Int) throws {
                     let status = writeAll(fd, bytes, at: offset)
                     guard status == 0 else { throw POSIXError(POSIXErrorCode(rawValue: status) ?? .EIO) }
-                    offset += bytes.count
                 }
-                try header.withUnsafeBytes { try put($0) }
-                for chunk in compressed { try chunk.withUnsafeBytes { try put($0) } }
+                try header.withUnsafeBytes { try put($0, at: 0) }
+                var offset = header.count
+                var table = Data(capacity: chunkCount * 16)
+                // One batch of chunks is compressed in parallel and written before the next, so only one
+                // batch of compressed bytes is held at a time (the format-2 writer holds no copy either).
+                let batch = max(1, ProcessInfo.processInfo.activeProcessorCount)
+                for first in stride(from: 0, to: chunkCount, by: batch) {
+                    let count = min(batch, chunkCount - first)
+                    var compressed = [[UInt8]](repeating: [], count: count)
+                    var checksums = [UInt64](repeating: 0, count: count)
+                    var failed = [Bool](repeating: false, count: count)
+                    compressed.withUnsafeMutableBufferPointer { outputs in
+                        checksums.withUnsafeMutableBufferPointer { hashes in
+                            failed.withUnsafeMutableBufferPointer { failures in
+                                DispatchQueue.concurrentPerform(iterations: count) { j in
+                                    let start = bodyStart + (first + j) * chunkBytes
+                                    let length = min(chunkBytes, source.count - start)
+                                    let input = UnsafeRawBufferPointer(start: source.baseAddress! + start, count: length)
+                                    hashes[j] = checksum(input)
+                                    var output = [UInt8](repeating: 0, count: length + 64)
+                                    let encoded = output.withUnsafeMutableBufferPointer { dest in
+                                        compression_encode_buffer(dest.baseAddress!, dest.count,
+                                                                  input.baseAddress!.assumingMemoryBound(to: UInt8.self), length,
+                                                                  nil, COMPRESSION_LZFSE)
+                                    }
+                                    if encoded == 0 { failures[j] = true; return }
+                                    output.removeSubrange(encoded..<output.count)
+                                    outputs[j] = output
+                                }
+                            }
+                        }
+                    }
+                    guard !failed.contains(true) else { throw SnapshotError.truncated }
+                    for j in 0..<count {
+                        try compressed[j].withUnsafeBytes { try put($0, at: offset) }
+                        offset += compressed[j].count
+                        append(UInt32(min(chunkBytes, bodyLength - (first + j) * chunkBytes)), to: &table)
+                        append(UInt32(compressed[j].count), to: &table); append(checksums[j], to: &table)
+                    }
+                }
+                try table.withUnsafeBytes { try put($0, at: tableAt) }
                 closed = true
                 guard close(fd) == 0 else { throw POSIXError(POSIXErrorCode(rawValue: errno) ?? .EIO) }
                 if rename(temp.path, url.path) != 0 { throw CocoaError(.fileWriteUnknown) }
@@ -322,6 +342,7 @@ public enum Snapshot {
             let rawLength64 = try take(UInt64.self)
             guard rawLength64 <= Int.max else { throw SnapshotError.truncated }
             let rawLength = Int(rawLength64)
+            guard rawLengthPlausible(rawLength, fileSize: bytes.count) else { throw SnapshotError.truncated }
             let chunkCount = Int(try take(UInt32.self))
             guard chunkCount > 0, chunkCount <= (bytes.count - cursor) / 16 else { throw SnapshotError.truncated }
             struct Entry { let raw: Int; let compressed: Int; let hash: UInt64; let source: Int; let destination: Int }

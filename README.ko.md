@@ -75,6 +75,7 @@ xattr -dr com.apple.quarantine /Applications/Hoard.app
 
 디스크 전체를 스캔하려면 **시스템 설정 › 개인정보 보호 및 보안 › 전체 디스크 접근 권한**에 Hoard를
 추가하세요. 릴리스 빌드는 ad-hoc 서명이라, 업데이트할 때마다 macOS가 이 권한을 다시 요청합니다.
+새 버전이 나왔는지는 **Hoard › 업데이트 확인…**에서 확인할 수 있습니다.
 
 **명령줄 도구.** Homebrew로 설치하거나:
 

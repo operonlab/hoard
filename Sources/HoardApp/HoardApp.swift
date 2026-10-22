@@ -275,6 +275,9 @@ struct AppCommands: Commands {
     var body: some Commands {
         SidebarCommands()
         InspectorCommands()
+        CommandGroup(after: .appInfo) {
+            Button("檢查更新…") { model.updateCheckShown = true }
+        }
         CommandGroup(replacing: .help) {
             Button("Hoard 的新功能") {
                 model.whatsNew = WhatsNew.releases.filter { $0.version == WhatsNew.currentVersion }

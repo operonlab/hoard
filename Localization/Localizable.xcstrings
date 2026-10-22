@@ -2139,6 +2139,28 @@
         }
       }
     },
+    "App 要到版本頁下載新的 Hoard 壓縮檔，換掉「應用程式」裡的 Hoard.app。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To update the app, download the new Hoard archive from the Releases page and replace Hoard.app in Applications."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アプリの更新は、リリースページから新しい Hoard の圧縮ファイルをダウンロードし、「アプリケーション」内の Hoard.app を置き換えてください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "앱을 업데이트하려면 릴리스 페이지에서 새 Hoard 압축 파일을 다운로드하고 ‘응용 프로그램’의 Hoard.app을 교체하세요."
+          }
+        }
+      }
+    },
     "App 關閉時也守護（登入後在背景執行）" : {
       "localizations" : {
         "en" : {
@@ -2333,6 +2355,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hoard %@의 새로운 기능"
+          }
+        }
+      }
+    },
+    "Hoard 不會自己連網，所以不會自動檢查。打開版本頁，看看有沒有比目前更新的版本。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoard does not connect to the internet, so it cannot check automatically. Open the Releases page to see whether a newer version is available."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoard はインターネットに接続しないため、自動確認はしません。リリースページを開いて、新しいバージョンがあるか確認してください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoard는 인터넷에 연결하지 않으므로 자동으로 확인하지 않습니다. 릴리스 페이지를 열어 더 새로운 버전이 있는지 확인하세요."
           }
         }
       }
@@ -3011,6 +3055,28 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "「%1$@」：%2$@"
+          }
+        }
+      }
+    },
+    "「Hoard › 檢查更新…」會打開版本頁；命令列工具若是用 Homebrew 裝的，可以一鍵在終端機更新。Hoard 本身照樣不連網。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoard › Check for Updates… opens the Releases page. If the command-line tool was installed with Homebrew, you can update it in Terminal with one click. Hoard itself still does not connect to the internet."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "「Hoard › アップデートを確認…」でリリースページを開けます。コマンドラインツールを Homebrew でインストールした場合は、ターミナルでワンクリックで更新できます。Hoard 自体は引き続きインターネットに接続しません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "‘Hoard › 업데이트 확인…’에서 릴리스 페이지를 열 수 있습니다. 명령줄 도구를 Homebrew로 설치했다면 터미널에서 클릭 한 번으로 업데이트할 수 있습니다. Hoard 자체는 여전히 인터넷에 연결하지 않습니다."
           }
         }
       }
@@ -5691,6 +5757,50 @@
         }
       }
     },
+    "命令列工具可以用 Homebrew 安裝：" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You can install the command-line tool with Homebrew:"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "コマンドラインツールは Homebrew でインストールできます："
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "명령줄 도구는 Homebrew로 설치할 수 있습니다:"
+          }
+        }
+      }
+    },
+    "命令列工具是用 Homebrew 安裝的。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The command-line tool was installed with Homebrew."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "コマンドラインツールは Homebrew でインストールされています。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "명령줄 도구가 Homebrew로 설치되어 있습니다."
+          }
+        }
+      }
+    },
     "和 %@ 的掃描相比（%@）" : {
       "localizations" : {
         "en" : {
@@ -5847,6 +5957,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "공간 지도에서 강조 표시"
+          }
+        }
+      }
+    },
+    "在終端機更新命令列工具" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update Command-Line Tool in Terminal"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ターミナルでコマンドラインツールを更新"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "터미널에서 명령줄 도구 업데이트"
           }
         }
       }
@@ -6265,6 +6397,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "정상"
+          }
+        }
+      }
+    },
+    "完成" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完了"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "완료"
           }
         }
       }
@@ -7547,6 +7701,28 @@
         }
       }
     },
+    "打開「終端機」執行 brew upgrade operonlab/tap/hoard" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Terminal and run brew upgrade operonlab/tap/hoard"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ターミナルを開いて brew upgrade operonlab/tap/hoard を実行"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "터미널을 열어 brew upgrade operonlab/tap/hoard 실행"
+          }
+        }
+      }
+    },
     "打開垃圾桶" : {
       "localizations" : {
         "en" : {
@@ -7565,6 +7741,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "휴지통 열기"
+          }
+        }
+      }
+    },
+    "打開版本頁" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Releases Page"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "リリースページを開く"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "릴리스 페이지 열기"
           }
         }
       }
@@ -9141,6 +9339,50 @@
         }
       }
     },
+    "檢查更新" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check for Updates"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アップデートを確認"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "업데이트 확인"
+          }
+        }
+      }
+    },
+    "檢查更新…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check for Updates…"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アップデートを確認…"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "업데이트 확인…"
+          }
+        }
+      }
+    },
     "檢視" : {
       "localizations" : {
         "en" : {
@@ -10327,6 +10569,28 @@
         }
       }
     },
+    "無法打開終端機" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Could Not Open Terminal"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ターミナルを開けませんでした"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "터미널을 열 수 없습니다"
+          }
+        }
+      }
+    },
     "無法把「%@」丟到垃圾桶" : {
       "localizations" : {
         "en" : {
@@ -11237,6 +11501,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "현재 조건에 맞는 정리 제안이 없습니다."
+          }
+        }
+      }
+    },
+    "目前版本：Hoard %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Current version: Hoard %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "現在のバージョン：Hoard %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "현재 버전: Hoard %@"
           }
         }
       }

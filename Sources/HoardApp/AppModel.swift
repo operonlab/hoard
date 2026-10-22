@@ -194,6 +194,7 @@ final class AppModel: ObservableObject {
     // Trash (§8)
     @Published var trashRequest: TrashRequest?
     @Published var whatsNew: [WhatsNewRelease]?
+    @Published var updateCheckShown = false
     @Published var uninstallRequest: UninstallRequest?
     @Published var trashedBanner: TrashedBatch?
     @Published var alert: AppAlert?

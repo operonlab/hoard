@@ -74,6 +74,7 @@ xattr -dr com.apple.quarantine /Applications/Hoard.app
 
 To scan the whole disk, add Hoard under **System Settings › Privacy & Security › Full Disk Access**.
 The release build carries an ad-hoc signature, so macOS asks for this again after each update.
+To see whether a newer version is out, choose **Hoard › Check for Updates…**.
 
 **The command-line tool.** Install it with Homebrew:
 

@@ -22,6 +22,8 @@ enum WhatsNew {
                          body: String(localized: "每組按「只留一份」，或按「每組只留一份…」一次處理全部，一組永遠至少留一份。最小檔案多了 1 MB 和 10 MB，小一點的重複檔也找得到。")),
             WhatsNewItem(symbol: "internaldrive", title: String(localized: "「系統資料」是什麼"),
                          body: String(localized: "新的說明頁逐項解釋「看不到的空間」每一行，以及為什麼和系統設定的數字不一樣。從「說明」選單打開。")),
+            WhatsNewItem(symbol: "arrow.down.circle", title: String(localized: "檢查更新"),
+                         body: String(localized: "「Hoard › 檢查更新…」會打開版本頁；命令列工具若是用 Homebrew 裝的，可以一鍵在終端機更新。Hoard 本身照樣不連網。")),
             WhatsNewItem(symbol: "wrench.and.screwdriver", title: String(localized: "修正"),
                          body: String(localized: "「最近變動」的變大、變小不再重複計算；確認單不再把每個檔案都說成和其他檔案共用空間；一次丟很多項時，每個沒丟成的都會列出來。")),
         ]),

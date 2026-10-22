@@ -38,6 +38,7 @@ struct MainView: View {
         .sheet(isPresented: Binding(get: { model.whatsNew != nil }, set: { if !$0 { model.closeWhatsNew() } })) {
             WhatsNewSheet(releases: model.whatsNew ?? [], model: model)
         }
+        .sheet(isPresented: $model.updateCheckShown) { UpdateSheet(model: model) }
         .alert(model.alert?.title ?? "", isPresented: Binding(get: { model.alert != nil }, set: { if !$0 { model.alert = nil } })) {
             Button("好") { model.alert = nil }
         } message: { Text(model.alert?.message ?? "") }
